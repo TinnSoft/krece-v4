@@ -26,8 +26,7 @@ function estimateColumns() {
     return [{
             label: "No",
             field: "public_id",
-            width: "40px",
-            sort: true,
+            sortable: true,
             filter: true,
             type: "text"
         },
@@ -41,13 +40,11 @@ function estimateColumns() {
                 return value.name;
             },
             filter: true,
-            width: "150px",
             type: "string"
         },
         {
             label: "Creación",
             field: "created_at",
-            width: "80px",
             sort(a, b) {
                 return new Date(a.date) - new Date(b.date);
             },
@@ -59,7 +56,6 @@ function estimateColumns() {
         {
             label: "Actualización",
             field: "updated_at",
-            width: "80px",
             sort(a, b) {
                 return new Date(a.date) - new Date(b.date);
             },
@@ -78,15 +74,13 @@ function estimateColumns() {
             format(value) {
                 return accounting.formatMoney(value);
             },
-            type: "string",
-            width: "70px"
+            type: "string"
         },
         {
             label: "Acciones",
             field: "actions",
-            sort: false,
-            filter: false,
-            width: "100px"
+            sortable: false,
+            filter: false
         }
     ];
 }
@@ -561,7 +555,6 @@ function invoiceColumns() {
             field: "actions",
             name: "actions",
             sortable: false,
-            align: 'right',
         }
     ];
 }

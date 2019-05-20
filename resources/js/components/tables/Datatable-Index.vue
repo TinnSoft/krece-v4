@@ -1,55 +1,55 @@
 <template>
-     <div>
+     <div class="q-pa-md">
 
-        <q-table ref="mainTable" :data="table" :columns="columns" 
+        <q-table      
+            dense
+            ref="mainTable" 
+            :data="table" 
+            :columns="columns" 
             :visible-columns="visibleColumns" row-key="id" 
             :loading="loading"
             :pagination.sync="paginationControl"
             :filter="filter"
-            dense
-            color="secondary">
+            >
 
-            <template slot="top-right" slot-scope="props">
-              <q-table-columns
-                color="secondary"
-                class="q-mr-sm"
+            <template v-slot:top="props">
+              <q-input borderless dense debounce="300" v-model="filter" placeholder="Buscar">
+                <template v-slot:append>
+                  <q-icon name="search" ></q-icon>
+                </template>
+              </q-input>
+             <q-space ></q-space>
+              <q-select
                 v-model="visibleColumns"
-                :columns="columns"
-              />           
+                multiple
+                borderless
+                dense
+                options-dense
+                :display-value="$q.lang.table.columns"
+                emit-value
+                map-options
+                :options="columns"
+                option-value="name"
+                style="min-width: 150px"
+              ></q-select>
+      
               <q-btn
                 flat round dense
                 :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
                 @click="props.toggleFullscreen"
-              >
-              <q-tooltip>Ver en pantalla completa</q-tooltip>
-              </q-btn>
-              
+                class="q-ml-md"
+              ><q-tooltip>Ver en pantalla completa</q-tooltip></q-btn>
             </template>
-
-            <template slot="top-left" slot-scope="props">
-              <q-search
-                hide-underline
-                color="secondary"
-                v-model="filter"
-                class="col-6"
-              />
-            </template>
-          
-          <q-tr slot="header" slot-scope="props">
-            <q-th auto-width v-for="col in props.cols" :key="col.name" :props="props">
-              {{ col.label }}
-            </q-th>
-          </q-tr>
-
+     
           <q-tr slot="body" slot-scope="props" :props="props" class="cursor-pointer">
             <q-td auto-width v-for="col in props.cols" :key="col.name" :props="props">             
               <template v-if="col.name==='status_id'">
                 <rowStatus  :statusId="props.row.status_id" :processType="kmodule"></rowStatus>
               </template>
               <template v-else-if="col.name==='public_id'">
-                <u style="color: green;" @click="show(props)">{{props.row.public_id}}</u>
-            </template>
-               <template v-else-if="col.name==='actions'">
+                <u @click="show(props)">{{props.row.public_id}}</u>
+              </template>
+              <template v-else-if="col.name==='actions'">
                   <template v-if="hasLockedBtn===true">
                     <cToggle @blur="lockUnlock(props.row, $refs)" :id="props.row.status_id"></cToggle>
                   </template>
@@ -57,18 +57,17 @@
                   <q-btn-dropdown
                       icon="view_list"
                       size="sm"
-                      color="secondary"
+                      color="primary"
+                      flat
                       rounded
-                      push
-                      split
                     >
                       <q-list dense link>                  
                       <cItem color="secondary" iconname="remove_red_eye" tooltiplabel="Ver" @click="show(props)"></cItem>                    
                         <cItem color="tertiary" :statusID="props.row.status_id" iconname="edit" tooltiplabel="Editar" @click="edit(props)"></cItem>
                         <cItem color="red" :statusID="props.row.status_id" iconname="delete" tooltiplabel="Eliminar" @click="deleteRow(props)"></cItem>
                         
-                        <q-separator inset />
-                        <q-item-label inset>Otros</q-item-label>
+                        <q-separator spaced ></q-separator>
+                        <q-item-label header>Otros</q-item-label>
                       
                         <cItem color="secondary" v-if="showEmailBtn===true" iconname="email" tooltiplabel="Enviar por email" @click="email($refs, props)"></cItem>
                         <cItem color="secondary" iconname="print" tooltiplabel="Imprimir" @click="pdf(props)"></cItem>
@@ -76,7 +75,6 @@
 
                       </q-list>                   
                 </q-btn-dropdown>
-
                 
               </template>
               <template v-else>
