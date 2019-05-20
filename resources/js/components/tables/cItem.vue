@@ -1,11 +1,9 @@
 <template>
-     <q-item dense v-close-overlay @click.native="handleClick" :disabled="isChecked">
-           <q-item-section>
-               <q-icon inverted :name="iconname" size="24px" :color="color"/>
-               </q-item-section>
-               <q-item-label>
-               <q-item-section label>{{tooltiplabel}}</q-item-section>
-           </q-item-label>
+     <q-item dense clickable v-close-popup @click.native="handleClick" :disabled="isChecked">
+           <q-item-section avatar>
+            <q-icon color="primary" :name="iconname" size="24px" ></q-icon>
+          </q-item-section>
+          <q-item-section>{{tooltiplabel}}</q-item-section>
       </q-item>
 </template>
 
