@@ -1,5 +1,5 @@
 <template>
-    <q-toggle color="secondary" :value="isChecked" checked-icon="lock_open" unchecked-icon="lock_outline" @blur="handleClick">
+    <q-toggle color="black" :value="isChecked" checked-icon="lock_open" unchecked-icon="lock_outline" @blur="handleClick">
         <q-tooltip>
             {{tooltipText}}
         </q-tooltip>
