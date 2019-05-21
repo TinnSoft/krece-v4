@@ -1,8 +1,8 @@
 <template>
      <q-page padding class="row justify-center">
         <div style="width: 500px; max-width: 90vw;">
-            <q-modal ref="emailModalForm"  v-ripple.mat :minimized="$q.platform.is.desktop" :content-css="{minWidth: '70vw', minHeight: '70vh'}">
-                <q-modal-layout>
+            <q-dialog ref="emailModalForm"  v-ripple.mat :minimized="$q.platform.is.desktop" :content-css="{minWidth: '70vw', minHeight: '70vh'}">
+                <q-card>
                 <q-toolbar color="secondary" slot="header"> 
                     <q-btn flat round dense icon="mail">                
                     </q-btn>                   
@@ -19,6 +19,27 @@
                     <br>
                     <q-input color="green" v-model="email.subject" float-label="ASUNTO"></q-input>
                     <br>
+
+                    <q-editor
+                      v-model="email.body"
+                      :definitions="{
+                        save: {
+                          tip: 'Save your work',
+                          icon: 'save',
+                          label: 'Save'
+                        },
+                        upload: {
+                          tip: 'Upload to cloud',
+                          icon: 'cloud_upload',
+                          label: 'Upload'
+                        }
+                      }"
+                      :toolbar="[
+                        ['bold', 'italic', 'strike', 'underline'],
+                        ['upload', 'save']
+                      ]"
+                    ></q-editor>
+                    <!--
                     <q-editor
                         v-model="email.body"              
                         :toolbar="[
@@ -50,6 +71,7 @@
                         ]">
                             
                     </q-editor>
+                    -->
 
                     
                 </div>
@@ -66,10 +88,10 @@
                           </span>                    
                         </q-btn>
                 </q-toolbar>
-                </q-modal-layout>
-            </q-modal>
+                </q-card>
+            </q-dialog>
 
-            <q-modal ref="emailModalForm_AddEmail" minimized :content-css="{padding: '20px'}">
+            <q-dialog ref="emailModalForm_AddEmail" minimized :content-css="{padding: '20px'}">
                 <q-field icon="email" helper="Solo está permitido adicionar un único destinatario" :count="50">
                     <q-input color="green" clearable v-model="newEmail" float-label="EMAIL" />
                 </q-field>
@@ -77,7 +99,7 @@
                 <q-btn flat color="faded" v-close-overlay>Cancelar</q-btn>
                 <q-btn @click.native="addNewEmail()" color="green">Agregar</q-btn>               
          
-            </q-modal>
+            </q-dialog>
             
         </div>
           
