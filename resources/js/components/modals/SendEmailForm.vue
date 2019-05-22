@@ -1,87 +1,95 @@
 <template>
-     <q-page padding class="row justify-center">
-        <div style="width: 500px; max-width: 90vw;">
-            <q-modal ref="emailModalForm"  v-ripple.mat :minimized="$q.platform.is.desktop" :content-css="{minWidth: '70vw', minHeight: '70vh'}">
-                <q-modal-layout>
-                <q-toolbar color="secondary" slot="header"> 
-                    <q-btn flat round dense icon="mail">                
-                    </q-btn>                   
-                    <q-toolbar-title>
-                        ENVIAR EMAIL
-                    </q-toolbar-title>   
-                    <q-btn flat round dense icon="person_add"  @click.native="openNewEmailModal()">
-                        <q-tooltip>Adicionar nuevo destinatario</q-tooltip>
-                    </q-btn>                 
-                </q-toolbar>
+     
+        <div class="q-pa-md q-gutter-sm">
 
-                <div class="layout-padding">
-                    <q-select multiple chips color="green" float-label="SELECCIONE LOS DESTINATARIOS" v-model="email.to" :options="listOfEmails"></q-select>
+          <q-dialog v-model="openEmailFormLayout">
+            <q-card style="width: 650px; max-width: 80vw;">
+              <q-bar>
+                <q-icon name="mail" ></q-icon>
+                <div>ENVIAR EMAIL</div>
+      
+                <q-space ></q-space>
+      
+                <q-btn dense flat icon="close" v-close-popup>
+                  <q-tooltip>Cerrar</q-tooltip>
+                </q-btn>
+              </q-bar>
+
+              <q-card-section>
+                  <q-select dense clearable multiple filled chips label="*SELECCIONE LOS DESTINATARIOS" 
+                    v-model="email.to" :options="listOfEmails" use-chips options-dense>
+                      <template v-slot:after>
+                          <q-btn flat round dense icon="person_add"  @click.native="openNewEmailModal()">
+                              <q-tooltip>Adicionar nuevo destinatario</q-tooltip>
+                          </q-btn> 
+                      </template>
+                  </q-select>
                     <br>
-                    <q-input color="green" v-model="email.subject" float-label="ASUNTO"></q-input>
+                    <q-input dense clearable filled v-model="email.subject" label="*ASUNTO"></q-input>
                     <br>
-                    <q-editor
-                        v-model="email.body"              
-                        :toolbar="[
-                            ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
-                            ['token', 'hr', 'link', 'custom_btn'],
+              </q-card-section>
+
+              <q-card-section>
+                   <q-editor
+                      :dense="$q.screen.lt.md"
+                      v-model="email.body"
+                      :toolbar="[
+                            ['bold', 'italic', 'strike','token', 'hr', 'link', 'custom_btn'],
                             ['print', 'fullscreen'],
-                            [
-                            {
-                                label: $q.i18n.editor.fontSize,
-                                icon: $q.icon.editor.fontSize,
-                                fixedLabel: true,
-                                fixedIcon: true,
-                                list: 'no-icons',
-                                options: ['size-1', 'size-2', 'size-3', 'size-4', 'size-5', 'size-6', 'size-7']
-                            },
-                            'removeFormat'
-                            ],
-                            ['unordered', 'ordered'],
-                            [
-                            {
-                                label: $q.i18n.editor.align,
-                                icon: $q.icon.editor.align,
-                                fixedLabel: true,
-                                list: 'only-icons',
-                                options: ['left', 'center', 'right', 'justify']
-                            },
-                            ],
-                            ['undo', 'redo']
-                        ]">
-                            
-                    </q-editor>
+                                [
+                                  {
+                                    label: $q.lang.editor.align,
+                                    icon: $q.iconSet.editor.align,
+                                    fixedLabel: true,
+                                    list: 'only-icons',
+                                    options: ['left', 'center', 'right', 'justify']
+                                  },
+                                ],
+                                ['unordered', 'ordered'],                        
+                                ['undo', 'redo']
+                              ]"
+                    ></q-editor>
+              </q-card-section>
+      
+              <q-card-actions align="right" class="text-primary"> 
+                  <q-btn dense :loading="loading" color="primary" @click.native="send()" icon="mail_outline" label="Enviar">
+                      <span slot="loading"><q-spinner-hourglass class="on-left" />
+                          Enviando..
+                      </span>                    
+                  </q-btn>
+                </q-card-actions>     
+            </q-card>
+          </q-dialog>
 
-                    
-                </div>
-
-                 <q-toolbar inverted slot="footer" color="secondary">
-                    <q-btn dense flat color="faded" v-close-overlay label="Cancelar"></q-btn>
-                        
-                      <q-toolbar-title>                    
-                      </q-toolbar-title>
-
-                      <q-btn dense no-wrap :loading="loading" @click.native="send()" icon="send" color="green" label="Enviar">
-                          <span slot="loading"><q-spinner-hourglass class="on-left" />
-                              Enviando..
-                          </span>                    
-                        </q-btn>
-                </q-toolbar>
-                </q-modal-layout>
-            </q-modal>
-
-            <q-modal ref="emailModalForm_AddEmail" minimized :content-css="{padding: '20px'}">
-                <q-field icon="email" helper="Solo está permitido adicionar un único destinatario" :count="50">
-                    <q-input color="green" clearable v-model="newEmail" float-label="EMAIL" />
-                </q-field>
-                <br>
-                <q-btn flat color="faded" v-close-overlay>Cancelar</q-btn>
-                <q-btn @click.native="addNewEmail()" color="green">Agregar</q-btn>               
          
-            </q-modal>
+            <q-dialog v-model="openAddEmailFormLayout">
+               <q-card style="width: 500px; max-width: 80vw;">
+                  <q-card-section>
+                    <div class="text-h6">Agregar Email</div>
+                  </q-card-section>
+
+                  <q-card-section>                      
+                      <q-input dense type="email" filled clearable v-model="newEmail" label="*EMAIL" counter maxlength="80" >
+                          <template v-slot:prepend>
+                            <q-icon name="email" ></q-icon>
+                          </template>
+                          <template v-slot:hint>
+                            Caracteres
+                          </template>
+                      </q-input>                                        
+                  </q-card-section>  
+
+                  <q-card-actions align="right" class="text-primary">                    
+                    <q-btn flat color="grey-6" label="Cancelar" v-close-popup ></q-btn>
+                    <q-btn flat label="Agregar" @click="addNewEmail()" ></q-btn>
+                  </q-card-actions>                 
+
+               </q-card>
+            </q-dialog>
             
         </div>
           
-     </q-page>
+
 </template>
  
  <script>
@@ -92,6 +100,8 @@ export default {
   data() {
     return {
       loading: false,
+      openEmailFormLayout: false,
+      openAddEmailFormLayout: false,
       email: {
         subject: "",
         body: "",
@@ -131,7 +141,8 @@ export default {
     },
     openNewEmailModal() {
       this.newEmail = "";
-      this.$refs["emailModalForm_AddEmail"].show();
+      //this.$refs["emailModalForm_AddEmail"].show();
+      this.openAddEmailFormLayout=true;
     },
     open(_documentID, _path, _model) {
       this.email.public_id = _documentID;
@@ -140,7 +151,8 @@ export default {
       this.email.to = [];
       this.listOfEmails = [];
       this.fetchData();
-      this.$refs["emailModalForm"].show();
+      //this.$refs["emailModalForm"].show();
+      this.openEmailFormLayout=true;
     },
     fetchData() {
       let vm = this;
