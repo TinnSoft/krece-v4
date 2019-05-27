@@ -2,44 +2,59 @@
      <q-page padding>
 
     <cToolbar toolbarlabel="FACTURA DE VENTA #: " :documentId="public_id" :redirectTo="`/${model}`" @click="$router.push(`/${model}/create`)"
-        label2="NUEVA FACTURA" icon2="add"></cToolbar>  
+       :showDropdown="true" label2="NUEVA FACTURA" icon2="add"></cToolbar>  
 
         <div class="doc-container">
             <div class="row ">
                 <div class="col-sm-5">
-                    <q-list style="border: 0;padding: 0">
-                        <q-input v-model="contactname" disable stack-label="Cliente" />
-                        <q-input v-model="seller" disable stack-label="Vendedor" />
-                        <q-input v-model="data.observations" type="textarea" disable stack-label="Observaciones" />
-                        <q-input v-model="listprice" disable stack-label="Lista de precios" />
-                        <q-input v-model="data.currency_code" disable stack-label="Moneda" />
-                    </q-list>
+                        <q-input dense  v-model="contactname" readonly label="Cliente" stack-label></q-input>
+                        <q-input dense  v-model="seller" readonly label="Vendedor" stack-label></q-input>
+                        <q-input  autogrow dense v-model="data.observations" type="textarea" stack-label readonly label="Observaciones"></q-input>
+                        <q-input dense  v-model="listprice" readonly label="Lista de precios" stack-label></q-input>
+                        <q-input dense  v-model="data.currency_code" readonly label="Moneda" stack-label></q-input>
+                   
                 </div>
                 <div class="col-sm-1">
                 </div>
                 <div class="col-sm-5">
-                    <q-list style="border: 0;padding: 0">
-                        <q-input v-model="data.date" disable stack-label="Fecha de creación" />
-                        <q-input v-model="data.due_date" disable stack-label="Fecha de vencimiento" />
-                        <q-input v-model="data.notes" type="textarea" disable stack-label="Notas" />
-                        <q-field label="Estado: " :label-width="2">
+                        <q-input  dense v-model="data.date" readonly label="Fecha de creación" stack-label></q-input>
+                        <q-input  dense v-model="data.due_date" readonly label="Fecha de vencimiento" stack-label></q-input>
+                        <q-input  autogrow dense v-model="data.notes" type="textarea" readonly label="Notas" stack-label></q-input>
+
+                        
+                        <q-field dense readonly>
+                          <template v-slot:control>
                             <cStatus :statusId="data.status_id"></cStatus>
-                        </q-field>
-                        <q-separator></q-separator>
+                          </template>
+                        </q-field>              
+
+                        <br>
                         <q-btn flat class="within-iframe-hide" color="positive" @click="LoadFiles($refs)">
-                            <q-icon size="1rem" name="attach_file" />
+                            <q-icon size="1rem" name="attach_file"></q-icon>
                             <small style='text-decoration: underline'>Gestionar Documentos</small>
                         </q-btn>
-                    </q-list>
                 </div>
             </div>
 
         </div>
         <br>
-        <q-tabs color="grey-1" text-color="positive">
-            <q-tab default slot="title" name="tab-1" label="Detalle"/>
-            <q-tab slot="title" name="tab-2"  label="Pagos asociados"/>
-            <q-tab-pane name="tab-1">
+        
+        <q-tabs
+          v-model="tabDefault"
+          dense
+          class="bg-grey-1 text-grey"
+          active-color="primary"
+          indicator-color="primary"
+          align="left"
+          narrow-indicator   
+          no-caps
+          inline-label
+        >
+          <q-tab name="detail" icon="details" label="DETALLE" ></q-tab>
+          <q-tab name="payment" icon="attach_money" label="PAGOS ASOCIADOS" ></q-tab>
+        </q-tabs>
+        <q-tab-panels v-model="tabDefault">
+            <q-tab-panel name="detail">
                 <cTableShow 
                     :qdata="table" 
                     :subtotal="data.sub_total" 
@@ -47,50 +62,54 @@
                     :taxes.sync="totalTaxes" 
                     :total="data.total"
                     :isTaxArray="true"
-                ></cTableShow>
-         
-            </q-tab-pane>
-            <q-tab-pane name="tab-2">
+                ></cTableShow>         
+            </q-tab-panel>
+            <q-tab-panel name="payment" >
                  <cPaymentAssociated :qdata="payments"></cPaymentAssociated> 
-            </q-tab-pane>
-        </q-tabs>
-
-        <cSendEmail ref="_sendEmail"></cSendEmail>
+            </q-tab-panel>
+          </q-tab-panels>
+        
+         <cSendEmail ref="_sendEmail"></cSendEmail>
+      
         <cAttachFiles ref="_attachfile"></cAttachFiles>
+
+  <!--
+       
+       
 
         <q-page-sticky position="top-left" :offset="[16, 16]">
         <q-btn rounded   color="secondary">
           <q-icon name="menu" />
 
-          <!-- with Vue reference -->
+         
           <q-popover ref="popover">
             <q-list dense link class="scroll" style="min-width: 200px">
-                <q-item v-close-overlay  @click.native="pdf()">
+                <q-item   @click.native="pdf()">
                     <q-item-section inverted color="grey-6" left icon="print" />                    
                     <q-item-label>
                         <q-item-section label>Imprimir</q-item-section>
                     </q-item-label>
                 </q-item>
-                <q-item v-close-overlay @click.native="edit()">
+                <q-item  @click.native="edit()">
                     <q-item-section inverted left icon="edit" color="grey-6" />
                     <q-item-label>
                         <q-item-section label>Editar</q-item-section>
                     </q-item-label>
                 </q-item>
-                <q-item v-close-overlay @click.native="clone()" >
+                <q-item  @click.native="clone()" >
                     <q-item-section inverted icon="content_copy" left color="grey-6" />
                     <q-item-label>
                         <q-item-section label>Clonar</q-item-section>
                     </q-item-label>
                 </q-item>
-                <q-item link v-close-overlay>
+                <q-item link >
                     <q-item-section inverted :icon="data.status_id === 1 ? 'lock_outline' : 'lock_open'"  color="grey-6" />
                     <q-item-label :label="data.status_id === 1 ? 'Anular' : 'Habilitar'" />
                     <q-item-section right >
                         <cToggle @blur="lockUnlock(data)" :id="data.status_id"></cToggle>
                     </q-item-section>  
                 </q-item>
-                <q-item v-close-overlay @click.native="email($refs)" >
+                <q-item  @click.native="email($refs)" >
                     <q-item-section inverted icon="mail" left color="grey-6" />
                     <q-item-label>
                         <q-item-section label>Enviar por Email</q-item-section>
@@ -108,8 +127,9 @@
           </q-popover>
         </q-btn>
       </q-page-sticky>
-
+ -->
      </q-page>
+    
 </template>
 
 <script>
@@ -137,6 +157,7 @@ export default {
   },
   data() {
     return {
+      tabDefault: 'detail',
       state: "ABIERTA",
       model: "invoice",
       path: `invoice/${this.$route.params.id}`,

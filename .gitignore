@@ -3,6 +3,7 @@
 /public/storage
 /storage/*.key
 /vendor
+/.env
 /public/dist
 /public/build
 /public/mix-manifest.json
