@@ -1,19 +1,18 @@
 <template>
- 
     <q-table
+        :data="qdata"
         dense
-      :data="qdata"
-      :columns="columns"
-      row-key="name"
-      color="secondary"
-    >
-     <q-tr slot="bottom-row" slot-scope="props" style="text-align: right" >  
-        <td class colspan="100%" align="right">    
-            <cTotals :subtotal="subtotal" :discounts="discounts" :taxes="taxes" :total="total" :isTaxArray="true"></cTotals>
-        </td>
-      </q-tr> 
-    </q-table>
-    
+        :columns="columns"
+        row-key="name"   
+        table-header-class="bg-light-blue-1"
+        flat     
+        bordered
+      >  
+        <template v-slot:bottom>
+           <cTotals :subtotal="subtotal" :discounts="discounts" :taxes="taxes" :total="total" :isTaxArray="true"></cTotals>
+        </template>
+  
+      </q-table>
 </template>
 <script type='text/javascript'>
 import cTotals from '../../components/tables/cTotal.vue';
