@@ -1,55 +1,68 @@
 <template>
-  <q-page class="row justify-center">
+  
     <div style="width: 400px; max-width: 90vw;">
 
-      <q-modal ref="attachFileModal" v-ripple.mat :minimized="$q.platform.is.desktop" :content-css="{minWidth: '50vw', minHeight: '50vh'}">
-        <q-modal-layout>
-                <q-toolbar color="secondary" slot="header"> 
-                    <q-btn flat round  icon="attach_file">                
-                    </q-btn>                   
-                    <q-toolbar-title>
-                        Gestion de Archivos
-                    </q-toolbar-title>   
-                    <q-btn flat round  icon="exit_to_app" v-close-overlay>
-                    </q-btn>                 
-                </q-toolbar>
+    
+        <q-dialog v-model="openAttachFilesFormLayout">
+          <q-card style="width: 650px; max-width: 80vw;">
 
-        
-           <div class="layout-padding">
-              <div class="q-subheading">Aquí podrás gestionar los archivos del documento actual</div>
+              <q-bar>
+                <q-icon name="attach_file" ></q-icon>
+                <div>GESTIÓN DE ARCHIVOS</div>
+      
+                <q-space ></q-space>
+      
+                <q-btn dense flat icon="close" v-close-popup>
+                  <q-tooltip>Cerrar</q-tooltip>
+                </q-btn>
+              </q-bar>
 
-              <br>
-              <q-field icon="file_upload" :helper="helper">
-                <q-uploader color="secondary" ref="testx" @finish="endUpload($refs)" 
-                :additionalFields="additionalfields" float-label="Seleccione un archivo"
-                 :url="url" ></q-uploader>
+               <q-card-section>
+                  <q-uploader
+                    dense
+                    :url="url"
+                    label="Seleccione un archivo"
+                  ></q-uploader>
+              </q-card-section>
+              
+              <q-card-section>
+                <q-list bordered class="rounded-borders" v-if="documentList.length >0" >
+                  <q-item-label header>ARCHIVOS CARGADOS</q-item-label>
+                  <q-item clickable v-for="item in documentList" :key="item.id">                    
+                      <q-item-section>                        
+                        <q-item-label>
+                            {{item.filename}}                       
+                        </q-item-label>
+                        <q-item-label caption lines="1">Actualizado: {{item.created_at}}</q-item-label>
+                      </q-item-section>
+                      
+                      <q-item-section top side>
+                        <div class="text-grey-8 q-gutter-xs">
+                          <q-btn class="gt-xs" size="12px" flat dense round @click="downloadFile(item.id)" icon="file_download">
+                            <q-tooltip>Descargar</q-tooltip>
+                          </q-btn>
+                          <q-btn class="gt-xs" size="12px" flat dense round @click="deleteRow(item.id)" icon="delete" >
+                            <q-tooltip>Eliminar</q-tooltip>
+                          </q-btn>
+                        </div>
+                      </q-item-section>                   
+                  </q-item>
+                   
+                </q-list>
+              </q-card-section>
+     
+          </q-card>
+        </q-dialog>
 
-              </q-field>
-              <br>
-              <q-list v-if="documentList.length >0" class="no-margin no-padding">
-                <q-item-label inset>MIS ARCHIVOS</q-item-label>
-                <q-item v-for="item in documentList" :key="item.id">
-                  <q-btn class="no-margin no-padding" @click="downloadFile(item.id)" icon="file_download" color="secondary" flat></q-btn>
-                  <q-item-label>
-                    <q-item-section label>
-                      <small>{{item.filename}}</small>
-                    </q-item-section>
-                    <q-item-section sublabel>Cargado: {{item.created_at}}</q-item-section>
-                  </q-item-label>
-                  <q-btn @click="deleteRow(item.id)" class="no-margin no-padding" style="float: right;" icon="close" color="red" flat></q-btn>
-                </q-item>
-              </q-list>
-           </div>
-        </q-modal-layout>
-      </q-modal>
     </div>
-  </q-page>
+
 </template>
 
 <script>
 export default {
   data() {
     return {
+      openAttachFilesFormLayout: false,
       url: "/api/document",
       error: false,
       helper:
@@ -132,7 +145,8 @@ export default {
       ];
 
       let data = new FormData();
-      this.$refs["attachFileModal"].show();
+     // this.$refs["attachFileModal"].show();
+      this.openAttachFilesFormLayout=true;
       this.fetchData();
     }
   }

@@ -52,44 +52,44 @@ function OutcomeColumns() {
 
 function IncomeColumns() {
     return [{
+            name: "product",
             label: "Producto",
             field: "product",
             format(value) {
                 return value.name;
             },
-            type: "text",
             align: 'left'
         },
         {
+            name: "unit_price",
             label: "Precio",
             field: "unit_price",
             format(value) {
                 return accounting.formatMoney(value);
             },
-            type: "string",
         },
         {
+            name: "quantity",
             label: "Cantidad",
             field: "quantity",
-            type: "string"
         },
         {
+            name: "discount",
             label: "Descuento (%)",
             field: "discount",
-            type: "string"
         },
         {
+            name: "tax_amount",
             label: "Impuesto (%)",
             field: "tax_amount",
-            type: "string"
         },
         {
+            name: "total",
             label: "Total",
             field: "total",
             format(value) {
                 return accounting.formatMoney(value);
             },
-            type: "string",
         }
     ];
 }
