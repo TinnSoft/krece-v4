@@ -8,57 +8,69 @@
         <div class="doc-container">
             <div class="row ">
                 <div class="col-sm-5">
-                    <q-list style="border: 0;">
-
                         <template v-if="showNumerationList==true">
-                            <q-select clearable color="secondary" @input="onChangeNumeration" 
-                            float-label="*Numeración" v-model="form.resolution_id_ref" :options="base.numerationList_sale_order" />
+                            <q-select clearable  @input="onChangeNumeration" 
+                            label="*Numeración" v-model="form.resolution_id_ref" :options="base.numerationList_sale_order"></q-select>
                         </template>
                         <template v-if="showManualNumber==true">
-                            <q-input color="secondary" v-model="form.prefix" float-label="Prefijo" />
+                            <q-input dense v-model="form.prefix" label="Prefijo" ></q-input>
+                            <q-input dense v-model="form.resolution_id" label="*Número" :error="checkIfFieldHasError(errors, 'resolution_id')">
+                              <template v-slot:error>
+                                label_required_field
+                              </template>
+                            </q-input>
                             <q-field :error="checkIfFieldHasError(errors, 'resolution_id')" :error-label="label_required_field">
-                                <q-input color="secondary" type="number" v-model="form.resolution_id" float-label="*Número" />
+                                  
                             </q-field>
                         </template>
 
-                        <q-field :error="checkIfFieldHasError(errors, 'customer_id')" :error-label="label_required_field">
-                            <q-select clearable color="secondary" 
-                              filter autofocus-filter 
-                              filter-placeholder="Buscar" 
+                        <q-field dense :error="checkIfFieldHasError(errors, 'customer_id')" >
+                            <q-select 
+                              dense
+                              use-input
+                              input-debounce="0"
+                              clearable 
+                              filled
+                              @filter="filterSelectComponent"                              
                               v-model="form.customer_id"                              
                               @input="onChangeContact(form.customer_id)"
-                              float-label="*Cliente"  
-                              :options="base.contacts" />
+                              label="*Cliente"  
+                              :options="base.contacts">
+                              <template v-slot:no-option>
+                                <q-item>
+                                  <q-item-section class="text-grey">
+                                    Sin resultados
+                                  </q-item-section>
+                                </q-item>
+                              </template> 
+                            </q-select>
                         </q-field>
-                        <q-field :error="checkIfFieldHasError(errors,'date')" :error-label="label_required_field">
+                        <q-field dense :error="checkIfFieldHasError(errors,'date')" :error-label="label_required_field">
                             <cDateTime v-model="form.date" stackLabel="*Fecha"></cDateTime>
                         </q-field>
 
-                        <q-field :error="checkIfFieldHasError(errors,'due_date')" :error-label="label_required_field">
+                        <q-field dense :error="checkIfFieldHasError(errors,'due_date')" :error-label="label_required_field">
                             <cDateTime v-model="form.due_date" stackLabel="*Fecha de vencimiento"></cDateTime>
                         </q-field>
 
-                        <q-input color="secondary" clearable type="textarea" v-model="form.observations" float-label="Observaciones" />
+                        <q-input dense clearable type="textarea" v-model="form.observations" label="Observaciones" />
 
-                        <q-field :error="checkIfFieldHasError(errors,'notes')" :error-label="label_required_field">
-                            <q-input  class="q-pb-md" color="secondary" clearable type="textarea" v-model="form.notes" float-label="*Notas" />
+                        <q-field dense :error="checkIfFieldHasError(errors,'notes')" :error-label="label_required_field">
+                            <q-input dense  class="q-pb-md"  clearable type="textarea" v-model="form.notes" label="*Notas" />
                         </q-field>
-
-                    </q-list>
                 </div>
                 <div class="col-sm-1">
                 </div>
                 <div class="col-sm-5">
-                    <q-list style="border: 0;">
-                        <q-select clearable color="secondary" float-label="Vendedor" v-model="form.seller_id" :options="base.sellers" />
-                        <q-select clearable color="secondary" float-label="Lista de precios" v-model="form.list_price_id" :options="base.listprice" />
+                        <q-select clearable color="secondary" label="Vendedor" v-model="form.seller_id" :options="base.sellers" />
+                        <q-select clearable color="secondary" label="Lista de precios" v-model="form.list_price_id" :options="base.listprice" />
 
                         <q-field :error="checkIfFieldHasError(errors,'payment_terms_id')" :error-label="label_required_field">
-                            <q-select clearable color="secondary" @input="onChangePaymentTerms" float-label="*Plazo" 
+                            <q-select clearable color="secondary" @input="onChangePaymentTerms" label="*Plazo" 
                             v-model="form.payment_terms_id" :options="base.payment_terms" />
                         </q-field>
                         <q-field :error="checkIfFieldHasError(errors,'currency_code')" :error-label="label_required_field">
-                            <q-select clearable color="secondary" float-label="*Moneda" 
+                            <q-select clearable color="secondary" label="*Moneda" 
                             v-model="form.currency_code" :options="base.currency" />
                         </q-field>
                  
@@ -67,13 +79,12 @@
                           color="positive"  @click="loadFiles($refs)"
                           label="Gestionar Documentos">
                         </q-btn>
-                    </q-list>
                 </div>
             </div>
         </div>
-    
+    <!--
         <cInvoiceDetail :form="form" :base="base" :errors="errors" tabLabel="DETALLE DE LA FACTURA"></cInvoiceDetail>
-
+-->
         <cAttachFiles ref="_attachfile"></cAttachFiles>
      </q-page>
 </template>
@@ -157,7 +168,7 @@ export default {
     cAttachFiles,
     cToolbar,
     cDateTime,
-    cInvoiceDetail
+    //cInvoiceDetail
   },
   created() {
     if (this.$route.meta.mode === "edit") {
@@ -186,6 +197,21 @@ export default {
     },
   },
   methods: {
+    filterSelectComponent (val, update) {
+      
+      var vm = this;
+      console.log(vm.base.contacts)
+      if (val === '') {
+        update(() => {
+         vm.base.contacts = base.contacts
+        })
+        return
+      }
+      update(() => {
+        const needle = val.toLowerCase()
+        vm.base.contacts = vm.base.contacts.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
+      })
+      },
     onChangeNumeration(val) {
       if (val) {
         var vm = this;
