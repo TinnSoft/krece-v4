@@ -1,8 +1,9 @@
 <template>
      <q-page padding>
-
-    <cToolbar toolbarlabel="FACTURA DE VENTA #: " :documentId="public_id" :redirectTo="`/${model}`" @click="$router.push(`/${model}/create`)"
-       :showDropdown="true" label2="NUEVA FACTURA" icon2="add"></cToolbar>  
+      <q-card>
+        <q-card-section>
+          <cToolbar toolbarlabel="FACTURA DE VENTA #: " :documentId="public_id" :redirectTo="`/${model}`" @click="$router.push(`/${model}/create`)"
+            :showDropdown="true" label2="NUEVA FACTURA" icon2="add"></cToolbar>  
 
         <div class="doc-container">
             <div class="row ">
@@ -128,6 +129,8 @@
         </q-btn>
       </q-page-sticky>
  -->
+        </q-card-section>
+      </q-card>
      </q-page>
     
 </template>

@@ -23,7 +23,7 @@ class InvoiceSaleOrderDetail extends Model
     
     public function product()
     {
-        return $this->hasOne(Product::class, 'id', 'product_id')->select(array('id', 'name'));
+        return $this->hasOne(Product::class, 'id', 'product_id')->select(array('id', 'name','id as value', 'name as label'));
     }
     
     public function taxes()

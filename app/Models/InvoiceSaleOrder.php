@@ -42,28 +42,28 @@ class InvoiceSaleOrder extends Model
 	public function contact()
 	{
 		
-		return $this->hasOne(Contact::class, 'id', 'customer_id')->select(array('id', 'name','address','city','nit','phone1','public_id'));
+		return $this->hasOne(Contact::class, 'id', 'customer_id')->select(array('id', 'name','address','city','nit','phone1','public_id', 'id as value', 'name as label'));
 		
 	}
 	
 	public function seller()
 	{
 		
-		return $this->hasOne(Seller::class, 'id', 'seller_id')->select(array('id', 'name'));
+		return $this->hasOne(Seller::class, 'id', 'seller_id')->select(array('id', 'name','id as value', 'name as label'));
 		
 	}
 	
 	public function list_price()
 	{
 		
-		return $this->hasOne(ListPrice::class, 'id', 'list_price_id')->select(array('id', 'name'));
+		return $this->hasOne(ListPrice::class, 'id', 'list_price_id')->select(array('id', 'name','id as value', 'name as label'));
 		
 	}
 	
 	public function currency()
 	{
 		
-		return $this->hasOne(Currency::class, 'code_id','currency_code')->select(array('code_id as code', 'code_id'));
+		return $this->hasOne(Currency::class, 'code_id','currency_code')->select(array('code_id as code', 'code_id','code_id as value'));
 		
 	}
 	
@@ -81,7 +81,7 @@ class InvoiceSaleOrder extends Model
 
 	public function payment_terms()
 	{
-		return $this->hasOne(PaymentTerms::class,'id','payment_terms_id')->select(array('id','name','days'));
+		return $this->hasOne(PaymentTerms::class,'id','payment_terms_id')->select(array('id','name','days','id as value','name as label'));
 	}
 	
 	public function scopeAccountID($query,$isDeleted)
@@ -98,12 +98,15 @@ class InvoiceSaleOrder extends Model
 				//->where('status_id','<>',2)
                  ->where('public_id',  $id);
     }
-
+	
 	 public function scopeGetSelectedFields($query)
     {
         return $query->select('id','account_id','public_id','seller_id','list_price_id','customer_id','currency_code',
-                    'sub_total','total_discounts','total_taxes','total','date','due_date','notes','observations','exchange_rate',
-                    'created_at','updated_at','resolution_id','status_id','payment_terms_id','resolution_id_ref');
+					'sub_total','total_discounts','total_taxes','total',
+					'date',
+					'due_date','notes','observations','exchange_rate',
+					'created_at','updated_at','resolution_id','status_id','payment_terms_id','resolution_id_ref');
+					
 	}
 
 	public static function initialize()

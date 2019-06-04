@@ -1,13 +1,10 @@
 <template>
-      <q-tabs color="grey-1" text-color="positive" no-pane-border>
-          <q-tab default name="__detail" slot="title" :label="tabLabel" />
-          <q-tab-pane keep-alive name="__detail">
-            <div class="q-table-container q-table-dense">
-            <div class="q-table-middle scroll">
-            <table class="q-table q-table-horizontal-separator ">
+
+      <div >
+          <q-markup-table flat bordered dense>
               <thead >
-                  <tr class style="text-align: left;">
-                      <th class="text-center q-table-col-auto-width">PRODUCTO</th>
+                  <tr class="bg-light-blue-1">
+                      <th>PRODUCTO</th>
                       <th>DESCRIPCIÓN</th>
                       <th>PRECIO</th>
                       <th>CANTIDAD</th>
@@ -16,71 +13,57 @@
                       <th>TOTAL</th>
                   </tr>
               </thead>
-              <tbody slot="body" >
-                  <tr v-for="(_detail, index) in form.detail" :key="index" style="border-bottom: 1px solid #ddd;">
-                      
+              <tbody>
+                  <tr  v-for="(_detail, index) in form.detail" :key="index">                      
                       <td>   
-                        <div class="row items-center justify-between no-wrap">
-                          <button 
-                            @click="remove(_detail)"
-                            tabindex="0" 
-                            type="button" 
-                            class="q-btn inline relative-position q-btn-item non-selectable q-mr-xs q-btn-round 
-                            q-focusable q-hoverable bg-secondary text-white q-btn-dense" 
-                            style="font-size: 10px;">
-                            <div class="q-focus-helper">
-                            </div>
-                            <div class="q-btn-inner row col items-center justify-center">
-                              <i aria-hidden="true" class="q-icon material-icons">remove</i>
-                            </div>
-                          </button>                         
-                          <div>                
-                            <q-field :error="checkIfFieldHasError(errors,['detail.' + index + '.product_id'])" error-label="Seleccione un producto">
-                                  <q-select 
-                                    style="width: 12em;"                                       
-                                    autofocus-filter filter 
-                                    filter-placeholder="Buscar producto" 
-                                    v-model="_detail.product_id" 
+                         <q-select filled dense clearable  hide-bottom-space
+                                    :error="checkIfFieldHasError(errors,['detail.' + index + '.product_id'])"                                
+                                    filter 
+                                    v-model="_detail.product" 
                                     @input="onChangeProduct(_detail)" 
-                                    :options="base.products" />
-                              </q-field>   
-                          </div>
-                        </div>         
+                                    :options="base.products"
+                                    options-dense
+                                    >
+
+                                  <template v-slot:before>
+                                      <q-btn @click="remove(_detail)" round dense flat icon="delete" ></q-btn>
+                                  </template>
+                                </q-select>
                       </td>
                       
                       <td>
-                          <q-field>
-                              <q-input style="width: 12em;" v-model="_detail.description" />
-                          </q-field>
+                          <q-input autogrow
+                                dense
+                                hide-bottom-space
+                                v-model="_detail.description">
+                          </q-input>
                       </td>
-                      <td >
-                          <q-field  :error="checkIfFieldHasError(errors,['detail.' + index + '.unit_price'])" :error-label="label_required_field">
-                              <q-input style="width: 8em" type="number" prefix="$" v-model="_detail.unit_price" />
-                          </q-field>
+                      <td>
+                          <q-input hide-bottom-space
+                                   dense
+                                 :error="checkIfFieldHasError(errors,['detail.' + index + '.unit_price'])" 
+                                  type="number" prefix="$" v-model="_detail.unit_price">
+                          </q-input>
                       </td>
-                      <td >
-                          <q-field  :error="checkIfFieldHasError(errors,['detail.' + index + '.quantity'])" :error-label="label_required_field">
-                              <q-input  style="width: 7em" type="number" v-model="_detail.quantity" />
-                          </q-field>
+                      <td>
+                          <q-input dense type="number" v-model="_detail.quantity"  hide-bottom-space
+                              :error="checkIfFieldHasError(errors,['detail.' + index + '.quantity'])"
+                          ></q-input>
                       </td>
-                      <td  >
-                          <q-field >
-                              <q-input style="width: 4em" type="number" prefix="%" v-model="_detail.discount" />
-                          </q-field>
+                      <td>
+                          <q-input hide-bottom-space dense type="number" prefix="%" v-model="_detail.discount"></q-input>
                       </td>
-                      <td >
-                        <q-select style="width: 6em"  autofocus-filter filter filter-placeholder="Buscar impuesto" 
-                         v-model="_detail.tax_id" :value="_detail.tax_id" @input="onChangeTax(_detail)" :options="base.taxes" />                        
+                      <td>
+                        <q-select hide-bottom-space dense  autofocus-filter filter filter-placeholder="Buscar impuesto" 
+                         v-model="_detail.tax_id" :value="_detail.tax_id" @input="onChangeTax(_detail)" :options="base.taxes"></q-select>                        
                       </td>
-                      <td >
-                          <q-field >
-                              <q-input style="width: 10em" disable type="number" prefix="$" :value="totalByLine(_detail)" />
-                          </q-field>
+                      <td>
+                          <q-input hide-bottom-space dense disable type="number" prefix="$" :value="totalByLine(_detail)"></q-input>
                       </td>                    
                   </tr>
                   <tr>
                     <td class colspan="100%">
-                        <q-btn @click="addLine" flat rounded no-wrap color="deep-orange" label="NUEVO ITEM" icon="add"></q-btn>
+                        <q-btn @click="addLine" flat rounded no-wrap color="purple" label="AGREGAR ITEM" icon="add"></q-btn>
                     </td>
                   </tr>
                   <tr>
@@ -89,11 +72,9 @@
                     </td>
                   </tr>
               </tbody>
-            </table>
-            </div>
-            </div>
-          </q-tab-pane>
-        </q-tabs>   
+          </q-markup-table>
+      </div>         
+
 </template>
 <script type="text/javascript">
 import cTotals from "../../components/tables/cTotal.vue";
