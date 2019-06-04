@@ -103,7 +103,7 @@ export default {
       default: "GUARDAR"
     },
     icon2: {
-      default: "check"
+      default: "save"
     },
     showDropdown: {
       default: false

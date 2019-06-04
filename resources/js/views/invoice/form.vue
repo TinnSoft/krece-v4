@@ -1,13 +1,17 @@
 <template>
      <q-page padding>
+     <q-card class="invoice-card">
+        <q-card-section>
+     
 
         <cToolbar :toolbarlabel="toolbarlabel" :documentId="form.resolution_id" :redirectTo="`${redirect}`" 
           @click="submit" :loading="loading"
         ></cToolbar>     
 
         <div class="doc-container">
-            <div class="row ">
-                <div class="col-sm-5">
+            <div class="row">                
+                <div class="col-12 col-md-5">
+                      <div class="q-gutter-md">
                         <template v-if="showNumerationList==true">
                             <q-select clearable  @input="onChangeNumeration" 
                             label="*Numeración" v-model="form.resolution_id_ref" :options="base.numerationList_sale_order"></q-select>
@@ -19,60 +23,79 @@
                                 label_required_field
                               </template>
                             </q-input>
-                            <q-field :error="checkIfFieldHasError(errors, 'resolution_id')" :error-label="label_required_field">
-                                  
-                            </q-field>
                         </template>
-
-                        <q-field dense :error="checkIfFieldHasError(errors, 'customer_id')" >
-                            <q-select 
-                              dense
-                              use-input
-                              input-debounce="0"
-                              clearable 
-                              filled
-                              @filter="filterSelectComponent"                              
-                              v-model="form.customer_id"                              
-                              @input="onChangeContact(form.customer_id)"
-                              label="*Cliente"  
-                              :options="base.contacts">
-                              <template v-slot:no-option>
-                                <q-item>
+                         
+                        <q-select 
+                            :error="checkIfFieldHasError(errors, 'customer_id')"
+                            dense
+                            use-input
+                            input-debounce="0"
+                            clearable 
+                            filled
+                            @filter="filterSelectComponent"                              
+                            v-model="form.contact"                              
+                            @input="onChangeContact(form.customer_id)"
+                            label="* Cliente"  
+                            :options="SelectOptions"
+                            options-dense
+                            hide-bottom-space>
+                            <template v-slot:no-option>
+                               <q-item>
                                   <q-item-section class="text-grey">
-                                    Sin resultados
-                                  </q-item-section>
+                                      Sin resultados
+                                   </q-item-section>
                                 </q-item>
-                              </template> 
-                            </q-select>
-                        </q-field>
-                        <q-field dense :error="checkIfFieldHasError(errors,'date')" :error-label="label_required_field">
-                            <cDateTime v-model="form.date" stackLabel="*Fecha"></cDateTime>
-                        </q-field>
+                            </template> 
+                            <template v-slot:after>
+                              <q-btn round dense flat icon="person_add" ></q-btn>
+                            </template>
+                        </q-select>      
+                      
+                      <cDateTime :inputValue="form.date" stackLabel="* Fecha" :errorField="checkIfFieldHasError(errors,'date')" ></cDateTime>
+                      
+                      <cDateTime :inputValue="form.due_date" stackLabel="* Fecha de vencimiento" :errorField="checkIfFieldHasError(errors,'due_date')"></cDateTime>
 
-                        <q-field dense :error="checkIfFieldHasError(errors,'due_date')" :error-label="label_required_field">
-                            <cDateTime v-model="form.due_date" stackLabel="*Fecha de vencimiento"></cDateTime>
-                        </q-field>
-
-                        <q-input dense clearable type="textarea" v-model="form.observations" label="Observaciones" />
-
-                        <q-field dense :error="checkIfFieldHasError(errors,'notes')" :error-label="label_required_field">
-                            <q-input dense  class="q-pb-md"  clearable type="textarea" v-model="form.notes" label="*Notas" />
-                        </q-field>
+                      <q-input filled autogrow dense clearable type="textarea" v-model="form.observations" label="Observaciones"></q-input>
+                  
+                      <q-input filled hide-bottom-space autogrow dense clearable type="textarea" v-model="form.notes" label="* Notas" 
+                          :error="checkIfFieldHasError(errors,'notes')">
+                        </q-input>
+                        <br>
+                    </div>
                 </div>
-                <div class="col-sm-1">
-                </div>
-                <div class="col-sm-5">
-                        <q-select clearable color="secondary" label="Vendedor" v-model="form.seller_id" :options="base.sellers" />
-                        <q-select clearable color="secondary" label="Lista de precios" v-model="form.list_price_id" :options="base.listprice" />
-
-                        <q-field :error="checkIfFieldHasError(errors,'payment_terms_id')" :error-label="label_required_field">
-                            <q-select clearable color="secondary" @input="onChangePaymentTerms" label="*Plazo" 
-                            v-model="form.payment_terms_id" :options="base.payment_terms" />
-                        </q-field>
-                        <q-field :error="checkIfFieldHasError(errors,'currency_code')" :error-label="label_required_field">
-                            <q-select clearable color="secondary" label="*Moneda" 
-                            v-model="form.currency_code" :options="base.currency" />
-                        </q-field>
+                 <div class="col-12 col-md-1">
+                 </div>
+                <div class="col-12 col-md-5">
+                    <div class="q-gutter-md">
+                        <q-select 
+                            dense clearable 
+                            filled label="Vendedor" 
+                            v-model="form.seller" :options="base.sellers"
+                            options-dense
+                            hide-bottom-space>
+                          </q-select>
+                        
+                        <q-select dense clearable 
+                          filled label="Lista de precios" 
+                          v-model="form.list_price" :options="base.listprice"
+                          options-dense
+                          hide-bottom-space>
+                        </q-select>
+                       
+                        <q-select dense filled clearable 
+                            @input="onChangePaymentTerms" 
+                            label="* Plazo"  :error="checkIfFieldHasError(errors,'payment_terms_id')"
+                            v-model="form.payment_terms" :options="base.payment_terms" 
+                            options-dense
+                            hide-bottom-space>
+                          </q-select>
+                        
+                        <q-select dense filled clearable 
+                            label="Moneda"  :error="checkIfFieldHasError(errors,'currency_code')"
+                            v-model="form.currency_code" :options="base.currency"
+                            options-dense
+                            hide-bottom-space>
+                          </q-select>                    
                  
                         <q-btn v-if="(processType == 'edit')" 
                           icon="attach_file" flat class="within-iframe-hide" 
@@ -80,12 +103,15 @@
                           label="Gestionar Documentos">
                         </q-btn>
                 </div>
+                </div>
             </div>
         </div>
-    <!--
+        <br>
         <cInvoiceDetail :form="form" :base="base" :errors="errors" tabLabel="DETALLE DE LA FACTURA"></cInvoiceDetail>
--->
+
         <cAttachFiles ref="_attachfile"></cAttachFiles>
+           </q-card-section>
+      </q-card>
      </q-page>
 </template>
 
@@ -102,7 +128,7 @@ export default {
   data() {
     return {
       errors:'',
-      form: {},
+      form: {},     
       base: {
         contacts: [
           {
@@ -161,16 +187,17 @@ export default {
       processType: "create",
       label_required_field: "Este Campo es Obligatorio",
       showManualNumber: false,
-      loading:false
+      loading:false,
+      SelectOptions: null
     };
   },
   components: {
     cAttachFiles,
     cToolbar,
     cDateTime,
-    //cInvoiceDetail
+    cInvoiceDetail
   },
-  created() {
+  created() {      
     if (this.$route.meta.mode === "edit") {
       this.path = `invoice/${this.$route.params.id}/edit`;
       this.store = `invoice/${this.$route.params.id}`;
@@ -186,6 +213,7 @@ export default {
       this.processType = "clone";
     }
     this.fetchData();
+
   },
   computed: {
     showNumerationList() {
@@ -200,16 +228,15 @@ export default {
     filterSelectComponent (val, update) {
       
       var vm = this;
-      console.log(vm.base.contacts)
       if (val === '') {
         update(() => {
-         vm.base.contacts = base.contacts
+         vm.SelectOptions = vm.base.contacts
         })
         return
       }
       update(() => {
         const needle = val.toLowerCase()
-        vm.base.contacts = vm.base.contacts.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
+        vm.SelectOptions = vm.base.contacts.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
       })
       },
     onChangeNumeration(val) {
@@ -287,10 +314,10 @@ export default {
     },
     getCurrentDate() {
       var vm = this;
-      if (vm.form.date == null) {
+      if (vm.form.date == null) {        
         const today = new Date();
-        vm.form.date = today;
-        vm.form.due_date = addToDate(today, { days: 30 });
+        vm.form.date = today.toLocaleDateString();
+        vm.form.due_date = addToDate(today, { days: 30 }).toLocaleDateString();
       }
     },
     fetchData() {
@@ -299,9 +326,9 @@ export default {
         .get(`/api/${vm.path}`)
         .then(function(response) {
           vm.$set(vm, "form", response.data.form);
-          
           if (response.data.base.contacts.length > 0) {
             vm.$set(vm.$data.base, "contacts", response.data.base.contacts);
+            vm.$set(vm.$data.base, "SelectOptions", response.data.base.contacts);
           }
           if (response.data.base.currency.length > 0) {
             vm.$set(vm.$data.base, "currency", response.data.base.currency);
@@ -377,3 +404,9 @@ export default {
   }
 };
 </script>
+<style lang="stylus">
+  .invoice-card
+    width 100%
+    max-width 100%
+ 
+</style>

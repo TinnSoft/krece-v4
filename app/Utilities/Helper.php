@@ -2,14 +2,10 @@
 use App\Models\{
     Seller,
     Tax,
-    Currency,
     ListPrice,
     Contact,
     Product,
-    ResolutionNumber,
     PaymentTerms,
-    BankAccount,
-    BankAccountType,
     Category
 };
 use Illuminate\Support\Facades\DB;
@@ -53,10 +49,6 @@ class Helper
     }
      public static function bank_account()
     {
-         /*return BankAccountType::with('bank') 
-                ->select('id','description')
-                ->get(); */
-
             return DB::table('bank_account')
                 ->join('bank_account_type', 'bank_account.bank_account_type_id', '=', 'bank_account_type.id')
                 ->where('bank_account.account_id',Auth::user()->account_id)
@@ -232,7 +224,7 @@ class Helper
             $item['total']=Helper::formatMoney($item['total']);
         }  
         
-        $model_in['date']=Carbon::parse($model_in['date'])->toFormattedDateString(); 
+        $model_in['date']= Carbon::parse($model_in['date'])->toFormattedDateString(); 
         $model_in['due_date']=Carbon::parse($model_in['due_date'])->toFormattedDateString(); 
 
         return $model_in;

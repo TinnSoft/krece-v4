@@ -4,18 +4,10 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Database\QueryException;
 use Carbon\Carbon;
 use App\Models\{
     InvoiceSaleOrderDetail,
     InvoiceSaleOrder,
-    Seller,
-    Tax,
-    Currency,
-    ListPrice,
-    Contact,
-    Product,
-    ResolutionNumber,
     Resolution,
     Category,
     Estimate,
@@ -23,13 +15,12 @@ use App\Models\{
     Remision
 };
 use App\Utilities\Helper;
-use PDF;
 use App\Events\RecordActivity;
 use DB;
 use App\Contracts\IEmailRepository;
 use App\Contracts\IPdfRepository;
 use App\Repositories\PaymentRepository;
-use Datatables;
+
 
 class InvoiceSaleOrderController extends Controller
 {
@@ -282,12 +273,13 @@ class InvoiceSaleOrderController extends Controller
         ->GetSelectedFields()
         ->first();
         $invoice['payment_terms_id']= (int)$invoice['payment_terms_id'];
+
         
         if (request()->get('convert')=='clone')
         {
             $PublicId = Helper::PublicId(InvoiceSaleOrder::class);
             $invoice['public_id']= $PublicId;
-            $invoice['date']=Helper::setCustomDateFormat(Carbon::now());
+            $invoice['date']= Helper::setCustomDateFormat(Carbon::now()); 
             $invoice['due_date']=Helper::setCustomDateFormat(Carbon::now()->addDays(30));
             $invoice['notes']=null;
             //return view('invoice.clone', compact('invoice'));
@@ -343,7 +335,7 @@ class InvoiceSaleOrderController extends Controller
         }
         
         
-        $invoice['date']= Helper::setCustomDateFormat(Carbon::parse($invoice['date']));
+        $invoice['date']=Helper::setCustomDateFormat(Carbon::parse($invoice['date']));
         $invoice['due_date']= Helper::setCustomDateFormat(Carbon::parse($invoice['due_date']));
         
         return response()
