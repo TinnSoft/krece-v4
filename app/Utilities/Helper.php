@@ -54,7 +54,7 @@ class Helper
                 ->where('bank_account.account_id',Auth::user()->account_id)
                 ->where('bank_account.isDeleted','=',0)
                 ->orderBy('bank_account_type.description', 'asc')
-                ->select('bank_account.id', 'bank_account.id as value','bank_account.bank_account_name as label',  'bank_account_type.description as stamp')
+                ->select('bank_account.id', 'bank_account.id as value','bank_account.bank_account_name as label',  'bank_account_type.description as description')
                 ->get();
     }
 
@@ -151,7 +151,7 @@ class Helper
                 ->join('category_type', 'category_type.id', '=', 'category.type_id')
                 ->where('category.account_id',Auth::user()->account_id)
                 ->where('category.parent_id','>',0)
-                ->select('category.id','category.type_id', 'category.name', 'category.name as label','category.id as value', 'category_type.type as stamp')
+                ->select('category.id','category.type_id', 'category.name', 'category.name as label','category.id as value', 'category_type.type as description')
                 ->get();
     }
 

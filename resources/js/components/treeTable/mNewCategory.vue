@@ -1,59 +1,79 @@
 <template>
- <q-page class="row justify-center">
-    <div style="width: 300px; max-width: 90vw;">      
-      <q-modal ref="categoryModal" v-ripple.mat :minimized="$q.platform.is.desktop" :content-css="{minWidth: '50vw', minHeight: '50vh'}"
-      @hide="handleHide">
-      <q-modal-layout>
-         <q-toolbar color="secondary" slot="header">                                        
-            <q-toolbar-title>
-                {{toolbarLabel}}  
-            </q-toolbar-title>   
-            <q-btn flat round  icon="save"  @click="submit"> 
-                <q-tooltip> Guardar</q-tooltip> 
-            </q-btn>
-            <q-btn flat round  icon="exit_to_app" v-close-overlay>
-              <q-tooltip> Cancelar </q-tooltip> 
-            </q-btn>                 
-          </q-toolbar>
-  
-       <div class="layout-padding">    
-          <q-field class="no-margin no-padding" :error="checkIfFieldHasError(errors, 'name')" error-label="Este campo es obligatorio">  
-            <q-input color="green" clearable v-model="form.name" float-label="*Nombre" />  
-          </q-field>  
-          <q-input color="green" type="textarea" clearable v-model="form.description" float-label="Descripción" />  
-          <q-input color="green" clearable v-model="form.niif_account" float-label="Cuenta NIIF" />   
-        </div>
-         <q-separator />
-         
-          <q-field
-            icon="help_outline"
-          >           
-            <blockquote>  
-              <small>  
-                Las categorías te permiten clasificar 
-                toda la información y movimientos de tu empresa de manera inteligente. 
-                </small>  
-            </blockquote>
-          </q-field>
-          <q-inner-loading :visible="isProcessing">
-          <q-spinner-hourglass size="50px" color="secondary"></q-spinner-hourglass>
-        </q-inner-loading>
+  <div class="q-pa-md q-gutter-sm">
+    <q-dialog v-model="openCategoryFormLayout">
+      <q-card style="width: 650px; max-width: 80vw;">
+        <q-bar dense class="bg-blue text-white">
+          <q-icon name="mail"></q-icon>
+          <div>{{toolbarLabel}}</div>
 
-        </q-modal-layout>
-      </q-modal>
-  
-    </div>
-  
-  </q-page>
+          <q-space></q-space>
+
+          <q-btn dense flat icon="close" v-close-popup>
+            <q-tooltip>Cerrar</q-tooltip>
+          </q-btn>
+        </q-bar>
+
+        <q-card-section>
+          <q-input
+            hide-bottom-space
+            dense
+            clearable
+            v-model="form.name"
+            label="*Nombre"
+            :error="checkIfFieldHasError(errors, 'name')"
+          ></q-input>
+          <q-input
+            hide-bottom-space
+            dense
+            type="textarea"
+            autogrow
+            clearable
+            v-model="form.description"
+            label="Descripción"
+          ></q-input>
+          <q-input
+            hide-bottom-space
+            dense
+            clearable
+            v-model="form.niif_account"
+            label="Cuenta NIIF"
+          ></q-input>    
+
+          <kBlockQuote textToShow="<strong>Las categorías</strong>
+              te ayudan a clasificar toda la información y movimientos de tu empresa de manera inteligente."
+              customClass="doc-note doc-note--tip">
+          </kBlockQuote>
+        </q-card-section>
+       
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn
+            rpunded
+            :loading="isProcessing"
+            color="primary"
+            @click.native="submit()"
+            icon="save"
+            label="Guardar"
+          >
+            <span slot="loading">
+              <q-spinner-hourglass class="on-left"/>
+            </span>
+          </q-btn>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+  </div>
 </template>
 
 <script>
 import kButton from "../../components/tables/cButton.vue";
 import kNotify from "../../components/messages/Notify.js";
+import kBlockQuote from "../../components/messages/cBlockQuote.vue";
 
 export default {
   data() {
     return {
+      openCategoryFormLayout: false,
       treeParentID: null,
       isProcessing: false,
       kindOfProcess: "create",
@@ -68,18 +88,14 @@ export default {
       pathFetchData: "/api/category/create"
     };
   },
-
   components: {
-    kButton
+    kButton,
+    kBlockQuote
   },
-
-  computed: {},
-
   methods: {
     handleHide(newVal) {
       this.$emit("hide", newVal);
     },
-
     checkIfFieldHasError(error, field) {
       try {
         if (error.errors[field]) {
@@ -89,7 +105,6 @@ export default {
 
       return false;
     },
-
     fetchData() {
       var vm = this;
       axios
@@ -102,7 +117,6 @@ export default {
 
     //kindOfProcess= create/edit
     //id= (opcional) id del registro cuando se edita
-
     open(kindOfProcess, id) {
       this.$set(this.$data, "errors", []);
       this.kindOfProcess = kindOfProcess;
@@ -116,7 +130,7 @@ export default {
       }
       this.fetchData();
       this.treeParentID = id;
-      this.$refs["categoryModal"].show();
+      this.openCategoryFormLayout = true;
     },
 
     submit() {

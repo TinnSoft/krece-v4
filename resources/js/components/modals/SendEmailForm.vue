@@ -177,7 +177,6 @@ export default {
             );
           })
           .catch(function(error) {
-            console.log(error.response.data, error.response)
             vm.$set(vm.$data, "errors", error);            
           });
       }
