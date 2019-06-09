@@ -1,6 +1,6 @@
 <template>
 <!--v-bind:style="styleButton"-->
-    <q-btn flat :color="color" dense :icon="iconname" @click="handleClick" :disabled="isChecked" class="q-mr-xs">
+    <q-btn flat :color="color" dense rounded :icon="iconname" @click="handleClick" :disabled="isChecked" class="q-mr-xs">
         <q-tooltip>
             {{tooltiplabel}}
         </q-tooltip>

@@ -49,7 +49,7 @@ class InventoryController extends Controller
     public function BaseInfo()
     {
     
-        $measure_unit = ProductInventoryType::select('measure_unit  as label','id as value', 'measure_type as stamp')        
+        $measure_unit = ProductInventoryType::select('measure_unit  as label','id as value', 'measure_type as description')        
         ->orderBy('id', 'asc')
         ->get()
         ->toArray();

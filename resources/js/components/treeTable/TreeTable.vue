@@ -1,10 +1,7 @@
 <template>
-  <q-page>
-      <div class="q-table-container q-table-dense">
-           
-            <div class="q-table-middle scroll">
-              <table class="q-table">
-                  <thead>
+  <div>
+      <q-markup-table flat bordered dense separator="none">  
+                  <thead class="bg-light-blue-1">
                       <tr  class style="text-align: left;">                        
                           <th >NOMBRE</th>
                           <th >DESCRIPCIÓN</th>
@@ -14,11 +11,11 @@
                   </thead>
                   <tbody>
             
-                      <tr v-for="(item ,index)  in (arrayTreeObj)" :key="index"  v-bind:class="[(item.id != selectedRowID.id) ? 'my-label':'text-green bg-light-green-11','']"  @click="selectedRow(item)" >
+                      <tr v-for="(item ,index)  in (arrayTreeObj)" :key="index"  v-bind:class="[(item.id != selectedRowID.id) ? 'my-label':'text-blue bg-light-blue-1','']"  @click="selectedRow(item)" >
                           <td  data-th="NOMBRE" @click="toggle(item, index)">
                           
                               <span class="q-tree-link q-tree-label items-center" v-bind:style="setPadding(item)" >                
-                                  <q-icon size="24px" style="cursor: pointer;" :name="iconName(item)" color="secondary"  />
+                                  <q-icon size="24px" style="cursor: pointer;" :name="iconName(item)"  />
                                   {{item.name}}
                               </span>
                           
@@ -28,18 +25,19 @@
                           <td width="10%" data-th="ACCIONES"> 
                             <kButton color="grey" iconname="add_circle" tooltiplabel="Agregar Categoría" @click="openProductModal($refs,'create', item.id)"></kButton>
                             <kButton  v-if="item.isEditable==true" color="grey"   iconname="edit" tooltiplabel="Editar" @click="openProductModal($refs,'edit', item.id)"></kButton>
-                            <kButton v-if="item.isEditable==true" color="red"  iconname="delete" tooltiplabel="Eliminar Categoría" @click="remove(item)"></kButton>                        
+                         
+                           <kButton v-if="item.isEditable==true" color="red"  iconname="delete" tooltiplabel="Eliminar Categoría" @click="remove(item)"></kButton>
+                                                 
                           </td>
                       </tr>
                   </tbody>
-            </table>
-            </div>
-            </div>
+          
+      </q-markup-table>            
             <mAddCategory ref="_addCategory"  @hide="hideCategoryModal"></mAddCategory>
               <q-inner-loading :visible="isProcessing">
                 <q-spinner-mat size="50px" color="teal-4" />{{loadingMessage}}
             </q-inner-loading>
-  </q-page>
+  </div>
 </template>
 
 <script>
@@ -64,7 +62,7 @@ export default {
   },
   components: {
     kButton,
-    mAddCategory
+   mAddCategory
   },
   data() {
     return {
@@ -192,19 +190,17 @@ export default {
     },
     remove(val) {
       var vm = this;
-
-      vm.$q
+     vm.$q
         .dialog({
           title: "Tenga Cuidado!",
           message: "Está seguro de eliminar la categoría: " + val.name,
           ok: "SI, Eliminar!",
           cancel: "NO, Cancelar",
-          color: "secondary"
         })
-        .then(() => {
+        .onOk(() => {
           vm.submit(val.id);
         })
-        .catch(() => {});
+        .onCancel(() => {});
     },
     submit(categoryid) {
       let vm = this;
