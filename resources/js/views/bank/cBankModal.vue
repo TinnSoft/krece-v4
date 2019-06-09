@@ -1,51 +1,44 @@
 <template>
-  <q-page padding class="row justify-center">
-    <div style="width: 400px; max-width: 90vw;">
 
-      <q-modal ref="bankModal" v-ripple.mat :minimized="$q.platform.is.desktop" :content-css="{minWidth: '40vw', minHeight: '50vh'}"
-      @hide="handleClose">
-        <q-modal-layout>
-                <q-toolbar color="secondary" slot="header"> 
-                    <q-btn flat round  icon="account_balance">                
-                    </q-btn>                   
-                    <q-toolbar-title>
-                        {{toolbarLabel}}
-                    </q-toolbar-title>   
-                    <q-btn flat round  icon="exit_to_app" v-close-overlay>
-                    </q-btn>                 
-                </q-toolbar>
+ <div class="q-pa-md q-gutter-sm">
 
-               <q-toolbar inverted slot="footer" color="secondary">                        
-                      <q-toolbar-title>                    
-                      </q-toolbar-title>
+          <q-dialog v-model="openBankFormLayout" @hide="handleClose">
+            <q-card style="width: 650px; max-width: 80vw;">
+              <q-bar dense class="bg-blue text-white">
+                <q-icon name="mail" ></q-icon>
+                <div>{{toolbarLabel}}  </div>
+      
+                <q-space ></q-space>
+      
+                <q-btn dense flat icon="close" v-close-popup>
+                  <q-tooltip>Cerrar</q-tooltip>
+                </q-btn>
+              </q-bar>
 
-                      <q-btn dense no-wrap :loading="loading" @click.native="_submit" icon="save" color="green" label="GUARDAR">
-                          <span slot="loading"><q-spinner-hourglass class="on-left" />
-                              GUARDANDO..
-                          </span>                    
-                        </q-btn>
-                </q-toolbar> 
+              <q-card-section>
+                  <q-select hide-bottom-space dense color="secondary" autofocus-filter filter label="*Tipo de cuenta"
+                      :error="checkIfFieldHasError(errors, 'bank_account_type_id')" v-model="form.bank_account_type_id" :options="base.banks" ></q-select>
+   
+                  <q-input hide-bottom-space dense :error="checkIfFieldHasError(errors, 'bank_account_name')" color="secondary" v-model="form.bank_account_name" 
+                  label="*Nombre de la cuenta" ></q-input>
+                
+                  <q-input hide-bottom-space dense color="secondary" v-model="form.bank_account_number" label="Número de cuenta"></q-input>
+                  
+                  <q-input hide-bottom-space dense :error="checkIfFieldHasError(errors, 'initial_balance')"  color="secondary"  type="number" 
+                  v-model="form.initial_balance" label="*Saldo Inicial ($)" ></q-input>
 
-                 <div class="layout-padding">
-
-                  <q-list style="border: 0;padding: 0">
-                    <q-field :error="checkIfFieldHasError(errors, 'bank_account_type_id')" error-label="Este campo es obligatorio">
-                      <q-select color="secondary" autofocus-filter filter filter-placeholder="Buscar" float-label="*Tipo de cuenta" v-model="form.bank_account_type_id" :options="base.banks" />
-                    </q-field>
-                    <q-field :error="checkIfFieldHasError(errors, 'bank_account_name')" error-label="Este campo es obligatorio">
-                      <q-input color="secondary" v-model="form.bank_account_name" float-label="*Nombre de la cuenta" />
-                    </q-field>
-                    <q-input  color="secondary" v-model="form.bank_account_number" float-label="Número de cuenta" />
-                    <q-field :error="checkIfFieldHasError(errors, 'initial_balance')" error-label="Este campo es obligatorio">
-                      <q-input  color="secondary"  type="number" v-model="form.initial_balance" float-label="*Saldo Inicial ($)" />
-                    </q-field>
-                    <q-input  color="secondary" type="textarea" v-model="form.description" float-label="Descripción" />
-                  </q-list>
-            </div>
-        </q-modal-layout>
-      </q-modal>
-    </div>
-  </q-page>
+                  <q-input hide-bottom-space dense color="secondary" type="textarea" v-model="form.description" label="Descripción"></q-input>
+              </q-card-section>
+      
+              <q-card-actions align="right" class="text-primary"> 
+                  <q-btn rpunded :loading="isProcessing" color="primary" @click.native="_submit()" icon="save" label="Guardar">
+                      <span slot="loading"><q-spinner-hourglass class="on-left" />
+                      </span>                    
+                  </q-btn>
+                </q-card-actions>     
+            </q-card>
+          </q-dialog>            
+      </div>
 </template>
 
 <script>
@@ -54,6 +47,7 @@
 export default {
   data() {
     return {
+      openBankFormLayout:false,
       toolbarLabel: "",
       pathFetchData: "/api/bank/create",
       error: false,
@@ -62,7 +56,7 @@ export default {
       checked: false,
       additionalfields: [],
       form: { bank_account_type_id: "" },
-      loading: false,
+      isProcessing: false,
       base: {
         banks: [
           {
@@ -113,7 +107,7 @@ export default {
       }
       this.fetchData();
       this.$set(this, "errors", ""); 
-      this.$refs["bankModal"].show();
+      this.openBankFormLayout=true;
     },
 
     _submit() {
@@ -137,7 +131,7 @@ export default {
             });
           }
           vm.isProcessing = false;
-          vm.$refs.bankModal.hide()
+          vm.openBankFormLayout=false;
         })
         .catch(function(error) {
           vm.$set(vm, "errors", error.response.data); 
@@ -164,7 +158,7 @@ export default {
             });
           }
           vm.isProcessing = false;
-          vm.$refs.bankModal.hide()
+          vm.openBankFormLayout=false;
         })
         .catch(function(error) {
           vm.isProcessing = false;

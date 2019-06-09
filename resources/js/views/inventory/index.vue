@@ -3,36 +3,40 @@
          <kToolbar toolbarlabel="Mi Inventario" :showbackButton="false" :showsaveButton="false" 
         icon2="add_circle_outline"></kToolbar>     
 
-                <q-table 
-                    :data="table" 
-                    :columns="columns" 
-                    :filter="filter"
-                    dense
-                    :loading="loading"
-                    color="secondary">
-                  
-                    <div slot="top-right" slot-scope="props" class="column">
-                      <q-btn size="md"  flat label="Nuevo Item" dense color="light" icon="add" @click="openProductModal($refs,'create')" class="q-mr-sm" >
-                        <q-tooltip >
-                          <div>Agregar <strong>nuevo producto o servicio</strong></div>
-                        </q-tooltip>
-                      </q-btn>                     
-                    </div>
 
-                    <template slot="top-left" slot-scope="props">
-                      <q-search
-                        hide-underline
-                        v-model="filter"
-                        class="col-6"
-                      />
-                    </template>  
-  
-                    <q-td slot="body-cell-actions" slot-scope="props" :props="props">
-                        <kButton color="secondary" iconname="edit" tooltiplabel="Editar" @click="editProductModal($refs, props.row)"></kButton>
-                        <kButton color="secondary" iconname="remove_red_eye" tooltiplabel="Ver" @click="show(props)"></kButton>
-                        <kButton color="red" iconname="delete" tooltiplabel="Eliminar" @click="remove(props)"></kButton>                  
-                    </q-td>
-                </q-table>
+        <q-table ref="mainTable" 
+            :data="table" 
+            :columns="columns" 
+             row-key="id" 
+            :loading="loading"
+            :filter="filter"
+            dense
+            >
+            
+          <template v-slot:top="props">
+              <q-input borderless dense debounce="300" v-model="filter" placeholder="Buscar">
+                <template v-slot:append>
+                  <q-icon name="search" ></q-icon>
+                </template>
+              </q-input>
+             <q-space ></q-space>
+             <q-btn flat dense color="primary" :disable="loading" label="Agregar Item" @click="openProductModal($refs,'create')" />
+              <q-btn
+                flat round dense
+                :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+                @click="props.toggleFullscreen"
+                class="q-ml-md"
+              ><q-tooltip>Ver en pantalla completa</q-tooltip></q-btn>
+            </template>
+         
+           
+            <q-td slot="body-cell-actions" slot-scope="props" :props="props">
+                <kButton color="grey" iconname="edit" tooltiplabel="Editar" @click="editProductModal($refs, props.row)"></kButton>
+                <kButton color="grey" iconname="remove_red_eye" tooltiplabel="Ver" @click="show(props)"></kButton>
+                <kButton color="grey" iconname="delete" tooltiplabel="Eliminar" @click="remove(props)"></kButton>
+            </q-td>
+        </q-table>
+          
 
       <productModal ref="_contact" @hide="closeProductModal"></productModal>
     </q-page>
@@ -145,7 +149,6 @@ function productColumns() {
       label: "Nombre",
       field: "name",
       name: "name",
-      width: "100px",
       sortable: true,
       filter: true,
       type: "string"
@@ -156,13 +159,11 @@ function productColumns() {
       name: "reference",
       sortable: true,
       filter: true,
-      width: "70px"
     },
     {
       label: "Precio",
       field: "sale_price",
       name: "sale_price",
-      width: "70px",
       sortable: true,
       filter: true,
       format(value) {
@@ -176,14 +177,12 @@ function productColumns() {
       sortable: true,
       filter: true,
       type: "string",
-      width: "80px"
     },
     {
       label: "Acciones",
       field: "actions",
       name: "actions",
       type: "string",
-      width: "70px"
     }
   ];
 }

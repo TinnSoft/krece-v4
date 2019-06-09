@@ -4,26 +4,36 @@
         <cToolbar toolbarlabel="GESTIÓN DE BANCOS" :showbackButton="false" 
         @click="openBankModal($refs, 'create')" label2="NUEVO BANCO" icon2="add"></cToolbar>        
      
-        <q-table ref="mainTable" :data="table" :columns="columns" 
+        <q-table ref="mainTable" 
+            :data="table" 
+            :columns="columns" 
              row-key="id" 
             :loading="loading"
             :filter="filter"
             :pagination.sync="paginationControl"
             dense
-            color="secondary">
+            >
 
-            <template slot="top-left" slot-scope="props">
-              <q-search
-                hide-underline
-                v-model="filter"
-                class="col-6"
-              />
-            </template>            
+            <template v-slot:top="props">
+              <q-input borderless dense debounce="300" v-model="filter" placeholder="Buscar">
+                <template v-slot:append>
+                  <q-icon name="search" ></q-icon>
+                </template>
+              </q-input>
+             <q-space ></q-space>
+              <q-btn
+                flat round dense
+                :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+                @click="props.toggleFullscreen"
+                class="q-ml-md"
+              ><q-tooltip>Ver en pantalla completa</q-tooltip></q-btn>
+            </template>
+         
            
             <q-td slot="body-cell-actions" slot-scope="props" :props="props">
-               <cButton color="secondary" iconname="edit" tooltiplabel="Editar" @click="editBankModal($refs,props)"></cButton>
-                <cButton color="secondary" iconname="remove_red_eye" tooltiplabel="Ver" @click="show(props)"></cButton>
-                <cButton color="red" iconname="delete" tooltiplabel="Eliminar" @click="remove(props)"></cButton>
+                <cButton iconname="edit" tooltiplabel="Editar" @click="editBankModal($refs,props)"></cButton>
+                <cButton iconname="remove_red_eye" tooltiplabel="Ver" @click="show(props)"></cButton>
+                <cButton iconname="delete" tooltiplabel="Eliminar" @click="remove(props)"></cButton>
             </q-td>
         </q-table>
 
