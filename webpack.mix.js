@@ -3,17 +3,15 @@ const fs = require('fs-extra')
 const mix = require('laravel-mix')
 require('laravel-mix-versionhash')
 
-// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
-//mix.config.vue.esModule = true
 mix
-  .js('resources/js/app.js', 'public/js')
-  .sass('resources/sass/app.scss', 'public/css')
+  .js('resources/js/app.js', 'public/dist/js')
+  .sass('resources/sass/app.scss', 'public/dist/css')
   .sourceMaps()
   .disableNotifications()
 
 if (mix.inProduction()) {
-  //version()
+
   mix
   .versionHash()
 
@@ -39,7 +37,7 @@ if (mix.inProduction()) {
 
 mix.webpackConfig({
   plugins: [
-    // new BundleAnalyzerPlugin()
+
   ],
   resolve: {
     extensions: ['.js', '.json', '.vue'],
@@ -52,17 +50,18 @@ mix.webpackConfig({
     }
   },
   output: {
-   // chunkFilename: 'js/[name].[chunkhash].js',
-   chunkFilename: 'js/[name].js',
-   publicPath: '/'
+    chunkFilename: 'dist/js/[name].[chunkhash].js',
+   //chunkFilename: 'js/[name].js',
+   //publicPath: '/'
    // publicPath: mix.config.hmr ? '//localhost:8080' : '/'
+   path: mix.config.hmr ? '/' : path.resolve(__dirname, './public/build')
   }
 })
-/*mix.then(() => {
+mix.then(() => {
   if (!mix.config.hmr) {
     process.nextTick(() => publishAseets())
   }
-})*/
+})
 
 function publishAseets () {
   const publicDir = path.resolve(__dirname, './public')
