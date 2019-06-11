@@ -1,13 +1,11 @@
 <template>
      <q-page padding>
-     <q-card class="invoice-card">
+     <cToolbar :toolbarlabel="toolbarlabel" :documentId="form.resolution_id" :redirectTo="`${redirect}`" 
+          @click="submit" :loading="loading"
+        ></cToolbar>   
+     <q-card >
         <q-card-section>
      
-
-        <cToolbar :toolbarlabel="toolbarlabel" :documentId="form.resolution_id" :redirectTo="`${redirect}`" 
-          @click="submit" :loading="loading"
-        ></cToolbar>     
-
         <div class="doc-container">
             <div class="row">                
                 <div class="col-12 col-md-5">

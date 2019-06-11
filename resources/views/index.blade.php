@@ -5,18 +5,8 @@ $config = [
     'locales' => config('app.locales'),
     'githubAuth' => config('services.github.client_id'),
 ];
-$polyfills = [
-    'Promise',
-    'Object.assign',
-    'Object.values',
-    'Array.prototype.find',
-    'Array.prototype.findIndex',
-    'Array.prototype.includes',
-    'String.prototype.includes',
-    'String.prototype.startsWith',
-    'String.prototype.endsWith',
-];
 @endphp
+
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -28,7 +18,7 @@ $polyfills = [
 
    <!-- CSRF Token -->
    <meta name="csrf-token" content="{{ csrf_token() }}">
-   <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+   <link rel="stylesheet" href="{{ mix('dist/css/app.css') }}">
  
 </head>
 <body>
@@ -41,11 +31,11 @@ $polyfills = [
 
   {{-- Load the application scripts --}}
   @if (app()->isLocal())
-    <script src="{{ mix('js/app.js') }}"></script>
+    <script src="{{ mix('dist/js/app.js') }}"></script>
   @else
-    <script src="{{ mix('js/manifest.js') }}"></script>
-    <script src="{{ mix('js/vendor.js') }}"></script>
-    <script src="{{ mix('js/app.js') }}"></script>
+    <script src="{{ mix('dist/js/manifest.js') }}"></script>
+    <script src="{{ mix('dist/js/vendor.js') }}"></script>
+    <script src="{{ mix('dist/js/app.js') }}"></script>
   @endif
 
 

@@ -1,6 +1,7 @@
 <template>
   <div class="q-pa-md">
     <div class="q-gutter-sm">
+    
           <q-dialog v-model="openInventoryForm" @hide="handleHide">
             <q-card style="width: 700px; max-width: 90vw;">
               <q-bar class="bg-blue text-white">
@@ -8,7 +9,7 @@
                 <div>{{toolbarLabel}}  </div>
       
                 <q-space ></q-space>
-      
+
                 <q-btn dense flat icon="close" v-close-popup>
                   <q-tooltip>Cerrar</q-tooltip>
                 </q-btn>
@@ -79,104 +80,10 @@
           </q-dialog>            
       </div>
   </div>
-<!--
- <q-page padding >
-    <div style="width: 400px; max-width: 90vw;">
-
-      <q-modal ref="productModal" v-ripple.mat :minimized="$q.platform.is.desktop" :content-css="{minWidth: '50vw', minHeight: '50vh'}"
-        @hide="handleHide">
-      <q-modal-layout>
-        <q-toolbar color="secondary" slot="header">
-              <q-toolbar-title>
-                  {{toolbarLabel}}  
-              </q-toolbar-title>   
-              <q-btn flat round  icon="save"  @click="submit"> 
-                <q-tooltip> Guardar </q-tooltip> 
-              </q-btn>
-              <q-btn flat round  icon="exit_to_app" v-close-overlay>
-                <q-tooltip>Cancelar </q-tooltip> 
-              </q-btn> 
-        </q-toolbar>
-
-        <div class="layout-padding">
-              <div class="row" >
-                <div class="col-sm-5">
-                  <q-list style="border: 0;padding: 0">
-
-                    <q-field :error="checkIfFieldHasError(errors,'name')" error-label="Este campo es obligatorio">
-                        <q-input clearable  :color="themeColor" v-model="form.name" float-label="*Nombre" />
-                    </q-field>
-                                            
-                    <q-input clearable   :color="themeColor" v-model="form.reference" float-label="Referencia" />
-                    <q-input clearable  :color="themeColor" v-model="form.description" float-label="Descripción" />
-                    <q-field :error="checkIfFieldHasError(errors,'sale_price')" error-label="Este campo es obligatorio">
-                        <q-input clearable type="number"  prefix="$"  :color="themeColor" v-model="form.sale_price" float-label="*Precio de venta" />
-                    </q-field>
-                    <q-select filter autofocus-filter filter-placeholder="Buscar" clearable :options="base.listPrice"  :color="themeColor" v-model="form.list_price_id" float-label="Lista de Precios" />                    
-                  </q-list>
-                </div>
-                <div class="col-sm-2">
-                </div>
-                <div class="col-sm-5">
-                  <q-list style="border: 0;padding: 0">
-                    <q-field :error="checkIfFieldHasError(errors,'tax_id')" error-label="Este campo es obligatorio">
-                     <q-select filter autofocus-filter filter-placeholder="Buscar" clearable  :options="base.taxes"  :color="themeColor" v-model="form.tax_id" float-label="*Impuesto" />                    
-                    </q-field>
-                    <br>
-                    <q-checkbox  :color="themeColor" v-model="form.inv_inStock" label="Ítem inventariable?">
-                      <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-                        <q-icon name="help_outline" />
-                        <strong>Marque esta opción</strong><div>si desea que la herramienta lleve el inventario de manera automática para este ítem</div>
-                      </q-tooltip>
-                    </q-checkbox>
-                    
-                     <template v-if="form.inv_inStock===true">
-                       <q-field
-                          icon="playlist_add"
-                          label="DETALLE"
-                          error-label="Estos campos son obligatorios"
-                        >
-                        <q-field :error="checkIfFieldHasError(errors,'inv_type_id')" error-label="Este campo es obligatorio">
-                          <q-select filter autofocus-filter filter-placeholder="Buscar" clearable :options="base.measureUnit"  :color="themeColor" v-model="form.inv_type_id" float-label="*Unidad de Medida" />    
-                        </q-field>
-                          <q-field :error="checkIfFieldHasError(errors,'inv_quantity_initial')" error-label="Este campo es obligatorio">
-                          <q-input clearable type="number"  :color="themeColor" v-model="form.inv_quantity_initial" float-label="*Cantidad Inicial" />    
-                          </q-field>
-                          <q-field :error="checkIfFieldHasError(errors,'inv_unit_cost')" error-label="Este campo es obligatorio">
-                          <q-input clearable type="number" prefix="$"  :color="themeColor" v-model="form.inv_unit_cost" float-label="*Precio de Compra" /> 
-                          </q-field>
-                    </q-field>
-                      
-                     </template>
-                  </q-list>
-                </div>
-              </div>
-              <br>       
-             
-            <blockquote>
-              <small>
-                No te olvides de seleccionar la categoría a la cual pertenece el ítem             
-                que estás creando.
-                Esto ayudará a que la herramienta te genere los reportes de una manera más precisa.
-              </small>
-            </blockquote>
-            <q-separator />
-            <q-field :error="checkIfFieldHasError(errors,'category_id')" error-label="Seleccione una categoría">
-               <treetable :route="pathCatehory" @click="handleClick" :selectedIDRow="form.category_id"/>    
-            </q-field>
-            </div>
-           <q-inner-loading :visible="loading">
-            <q-spinner-mat size="50px" color="teal-4" />{{spinnerText}}
-          </q-inner-loading>
-      </q-modal-layout>
-      </q-modal>
-
-    </div>
- </q-page>
- -->
 </template>
 
 <script>
+
 import treetable from "../../../components/treeTable/TreeTable.vue";
 import kNotify from "../../../components/messages/Notify.js";
 import kBlockQuote from "../../../components/messages/cBlockQuote.vue";
