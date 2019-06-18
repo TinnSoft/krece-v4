@@ -22,7 +22,23 @@
                               </template>
                             </q-input>
                         </template>
-                         
+                          <base-select
+                            v-model="form.contact"
+                            :options="SelectOptions"
+                            outlined
+                            self-filter
+                            clearable
+                            style="width: 250px"
+                            use-input
+                            hide-selected
+                            fill-input
+                            emit-value
+                            map-options
+                            input-debounce="0"
+                            label="Simple filter"
+                          >
+                          </base-select>
+
                         <q-select 
                             :error="checkIfFieldHasError(errors, 'customer_id')"
                             dense
