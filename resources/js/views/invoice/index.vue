@@ -1,7 +1,7 @@
 <template>
     <q-page padding >
-        <cToolbar toolbarlabel="FACTURAS DE VENTA" :showbackButton="false"  @click="$router.push(`/${modulename}/create`)"
-        label2="NUEVA FACTURA" icon2="add"></cToolbar>
+        <kToolbar toolbarlabel="FACTURAS DE VENTA" :showbackButton="false"  @click="$router.push(`/${modulename}/create`)"
+        label2="NUEVA FACTURA" icon2="add"></kToolbar>
 
         <cDatatable :path="path" :kmodule="modulename" :mwarning="warningmessage"
         :pathemaildata="pathEmailData" :pathToUpdateState="pathToUpdateState"></cDatatable>
@@ -10,13 +10,11 @@
 
 <script>
 import cDatatable from "../../components/tables/Datatable-Index.vue";
-import cToolbar from "../../components/cToolbar.vue";
 
 export default {
   middleware: "auth",
   components: {
-    cDatatable,
-    cToolbar
+    cDatatable
   },
   data() {
     return {

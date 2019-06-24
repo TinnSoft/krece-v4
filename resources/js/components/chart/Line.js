@@ -8,7 +8,6 @@ export default {
   watch: {
     'dataOriginal'() {
       this.renderChart(this.chartData, this.options);    
-      console.log(this.chartData)
     }
   },
   mounted() {

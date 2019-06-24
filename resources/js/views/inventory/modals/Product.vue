@@ -86,7 +86,6 @@
 
 import treetable from "../../../components/treeTable/TreeTable.vue";
 import kNotify from "../../../components/messages/Notify.js";
-import kBlockQuote from "../../../components/messages/cBlockQuote.vue";
 
 export default {
   data() {
@@ -173,7 +172,6 @@ export default {
   },
   components: {
     treetable,
-    kBlockQuote
   },
   methods: {
     handleClick(row) {

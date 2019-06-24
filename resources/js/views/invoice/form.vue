@@ -1,9 +1,11 @@
 <template>
      <q-page padding>
-     <cToolbar :toolbarlabel="toolbarlabel" :documentId="form.resolution_id" :redirectTo="`${redirect}`" 
+     <kToolbar :toolbarlabel="toolbarlabel" :documentId="form.resolution_id" :redirectTo="`${redirect}`" 
           @click="submit" :loading="loading"
-        ></cToolbar>   
+        ></kToolbar>   
      <q-card >
+     
+         <kToolbarCustom :label="labelval"></kToolbarCustom>
         <q-card-section>
      
         <div class="doc-container">
@@ -22,36 +24,31 @@
                               </template>
                             </q-input>
                         </template>
-                         
-                        <q-select 
-                            :error="checkIfFieldHasError(errors, 'customer_id')"
-                            dense
-                            use-input
-                            input-debounce="0"
-                            clearable 
-                            filled
-                            @filter="filterSelectComponent"                              
-                            v-model="form.contact"                              
+                          <kSelectFilter
+                           :error="checkIfFieldHasError(errors, 'customer_id')"
+                            v-model="form.contact"
+                            :options="base.contacts"
                             @input="onChangeContact(form.customer_id)"
-                            label="* Cliente"  
-                            :options="SelectOptions"
+                            filled
+                            dense
+                            outlined
+                            self-filter
+                            clearable
+                            use-input
+                            fill-input
+                            hide-selected
+                            emit-value
+                            map-options
+                            input-debounce="0"
+                            label="* Cliente"
                             options-dense
-                            hide-bottom-space>
-                            <template v-slot:no-option>
-                               <q-item>
-                                  <q-item-section class="text-grey">
-                                      Sin resultados
-                                   </q-item-section>
-                                </q-item>
-                            </template> 
-                            <template v-slot:after>
-                              <q-btn round dense flat icon="person_add" ></q-btn>
-                            </template>
-                        </q-select>      
+                            hide-bottom-space
+                          >                            
+                          </kSelectFilter>
                       
-                      <cDateTime :inputValue="form.date" stackLabel="* Fecha" :errorField="checkIfFieldHasError(errors,'date')" ></cDateTime>
+                      <kDateTime :inputValue="form.date" stackLabel="* Fecha" :errorField="checkIfFieldHasError(errors,'date')" ></kDateTime>
                       
-                      <cDateTime :inputValue="form.due_date" stackLabel="* Fecha de vencimiento" :errorField="checkIfFieldHasError(errors,'due_date')"></cDateTime>
+                      <kDateTime :inputValue="form.due_date" stackLabel="* Fecha de vencimiento" :errorField="checkIfFieldHasError(errors,'due_date')"></kDateTime>
 
                       <q-input filled autogrow dense clearable type="textarea" v-model="form.observations" label="Observaciones"></q-input>
                   
@@ -64,7 +61,7 @@
                  <div class="col-12 col-md-1">
                  </div>
                 <div class="col-12 col-md-5">
-                    <div class="q-gutter-md">
+                    <div class="q-gutter-md">                       
                         <q-select 
                             dense clearable 
                             filled label="Vendedor" 
@@ -107,19 +104,16 @@
         <br>
         <cInvoiceDetail :form="form" :base="base" :errors="errors" tabLabel="DETALLE DE LA FACTURA"></cInvoiceDetail>
 
-        <cAttachFiles ref="_attachfile"></cAttachFiles>
+        <kAttachFiles ref="_attachfile"></kAttachFiles>
            </q-card-section>
       </q-card>
      </q-page>
 </template>
 
 <script>
-import cAttachFiles from "../../components/modals/AttachFiles.vue";
-import cToolbar from "../../components/cToolbar.vue";
 import cInvoiceDetail from "../../components/tables/Datatable-Form-Detail.vue";
 import Quasar from "Quasar";
 const { addToDate } = Quasar.utils.date;
-import cDateTime from "../../components/cDateTime.vue";
 
 export default {
   middleware: "auth",
@@ -178,6 +172,7 @@ export default {
         ]
       },
       redirect: "/invoice",
+      labelval:`Factura # ${1}`,
       toolbarlabel: "NUEVA FACTURA DE VENTA #: ",
       path: "invoice/create",
       store: "invoice",
@@ -186,13 +181,9 @@ export default {
       label_required_field: "Este Campo es Obligatorio",
       showManualNumber: false,
       loading:false,
-      SelectOptions: null
     };
   },
   components: {
-    cAttachFiles,
-    cToolbar,
-    cDateTime,
     cInvoiceDetail
   },
   created() {      
@@ -223,20 +214,7 @@ export default {
     },
   },
   methods: {
-    filterSelectComponent (val, update) {
-      
-      var vm = this;
-      if (val === '') {
-        update(() => {
-         vm.SelectOptions = vm.base.contacts
-        })
-        return
-      }
-      update(() => {
-        const needle = val.toLowerCase()
-        vm.SelectOptions = vm.base.contacts.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
-      })
-      },
+    
     onChangeNumeration(val) {
       if (val) {
         var vm = this;
@@ -326,7 +304,6 @@ export default {
           vm.$set(vm, "form", response.data.form);
           if (response.data.base.contacts.length > 0) {
             vm.$set(vm.$data.base, "contacts", response.data.base.contacts);
-            vm.$set(vm.$data.base, "SelectOptions", response.data.base.contacts);
           }
           if (response.data.base.currency.length > 0) {
             vm.$set(vm.$data.base, "currency", response.data.base.currency);
@@ -362,7 +339,7 @@ export default {
         })
         .catch(function(error) {
           if (error.response.data.message) {
-            this.$q.notify({
+            vm.$q.notify({
               message: error.response.data.message,
               timeout: 3000,
               type: "negative"
@@ -402,9 +379,3 @@ export default {
   }
 };
 </script>
-<style lang="stylus">
-  .invoice-card
-    width 100%
-    max-width 100%
- 
-</style>

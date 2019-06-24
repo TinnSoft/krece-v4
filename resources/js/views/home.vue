@@ -26,11 +26,11 @@
     <div class="q-pa-md">  
       <div class="row">
         <div class="col">
-           <cardTotal class="my-card" title="INGRESOS" background-color="primary" icon-name="" :total="income_value" subtitle="Total entradas" />
+           <kCard class="my-card" title="INGRESOS" background-color="primary" icon-name="" :total="income_value" subtitle="Total entradas" />
              
         </div>
         <div class="col">
-           <cardTotal class="my-card" title="EGRESOS" background-color="orange" icon-name="" :total="outcome_value" subtitle="Total gastos" />              
+           <kCard class="my-card" title="EGRESOS" background-color="orange" icon-name="" :total="outcome_value" subtitle="Total gastos" />              
             
         </div>
       </div>  
@@ -131,14 +131,12 @@
 
 <script>
 import dashboardChart from "../components/chart/Line.js";
-import cardTotal from "../components/cCard.vue";
 
 export default {
   name: "home",
   middleware: "auth",
   components: {
     dashboardChart,
-    cardTotal
   },
   data: function() {
     return {

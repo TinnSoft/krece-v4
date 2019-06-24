@@ -65,8 +65,8 @@
         </div>
         <datatableShow :qdata="table"></datatableShow>
         <totals :subtotal="data.sub_total" :discounts="data.total_discounts" :taxes="totalTaxes" :total="data.total" :isTaxArray="true" ></totals>
-        <sendemail ref="_sendEmail"></sendemail>
-        <attachfiles ref="_attachfile"></attachfiles>
+        <kSendEmailForm ref="_sendEmail"></kSendEmailForm>
+        <kAttachFiles ref="_attachfile"></kAttachFiles>
     </div>
 </template>
 
@@ -81,16 +81,12 @@ import {
 } from 'quasar-framework/dist/quasar.mat.esm'
 
 import totals from '../../components/tables/Total.vue'
-import kToolbar from '../../components/Toolbar.vue'
 
 import axios from 'axios'
 import moment from 'moment'
 moment.locale('es');
 
 import datatableShow from '../../components/tables/Datatable-Show.vue'
-import sendemail from '../../components/modals/SendEmailForm.vue'
-
-import attachfiles from '../../components/modals/AttachFiles.vue'
 
 import status from '../../components/status/Remision.vue'
 
@@ -152,10 +148,10 @@ export default {
     components: {
         datatableShow, QInput, totals,kToolbar,
         QSlider, QBtn, QIcon,
-        QTooltip, QToolbar, QField,
+        QTooltip, QField,
         QToolbarTitle, QItemSeparator,
-        QFixedPosition, QFab, sendemail,
-        QFabAction, QList, QModal, attachfiles, status
+        QFixedPosition, QFab,
+        QFabAction, QList, QModal, status
     },
     created() {
         this.fetchData();

@@ -44,7 +44,6 @@
 
 <script>
 import kButton from "../../components/tables/cButton.vue";
-import kToolbar from "../../components/cToolbar.vue";
 import productModal from "./modals/Product.vue";
 import kNotify from "../../components/messages/Notify.js";
 
@@ -53,7 +52,6 @@ export default {
   components: {
     kButton,
     productModal,
-    kToolbar
   },
   methods: {
     show(cell) {

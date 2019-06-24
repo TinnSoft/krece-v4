@@ -6,7 +6,7 @@
       row-key="name"
       color="secondary"
     >
-     <q-tr slot="bottom-row" slot-scope="props" style="text-align: right" >  
+     <q-tr slot="bottom-row"  style="text-align: right" >  
         <td class colspan="100%" align="right">    
             <cTotals :subtotal="subtotal" :discounts="discounts" :taxes="taxes" :total="total" :isTaxArray="true"></cTotals>
         </td>

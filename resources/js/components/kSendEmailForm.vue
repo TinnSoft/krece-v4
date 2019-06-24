@@ -94,9 +94,10 @@
  
  <script>
 
- import kNotify from "../../components/messages/Notify.js";
+ import kNotify from "../components/messages/Notify.js";
 
 export default {
+  name:'kSendEmailForm',
   data() {
     return {
       loading: false,

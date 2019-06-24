@@ -82,7 +82,7 @@
             </q-tab-pane>
         </q-tabs>
 
-        <attachfiles ref="_attachfile"></attachfiles>
+        <kAttachFiles ref="_attachfile"></kAttachFiles>
     </div>
 </template>
 
@@ -103,8 +103,6 @@ import moment from 'moment'
 moment.locale('es');
 
 import datatableShow from '../../components/tables/Datatable-Show.vue'
-
-import attachfiles from '../../components/modals/AttachFiles.vue'
 
 import status from '../../components/status/Bill.vue'
 
@@ -164,7 +162,7 @@ export default {
         QTooltip, QToolbar, QField,
         QToolbarTitle, QItemSeparator,
         QFixedPosition, QFab,
-        QFabAction, QList, QModal, attachfiles, status,paymentassociated
+        QFabAction, QList, QModal, status,paymentassociated
     },
     created() {
         this.fetchData();

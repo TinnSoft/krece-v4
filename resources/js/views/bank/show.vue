@@ -109,7 +109,7 @@
           <q-tr slot="body" slot-scope="props" :props="props" class="cursor-pointer">
             <q-td auto-width v-for="col in props.cols" :key="col.name" :props="props">   
               <template v-if="col.name==='status_id'">
-                <cStatus  :statusId="props.row.status_id" processType="bank"></cStatus>
+                <kStatus  :statusId="props.row.status_id" processType="bank"></kStatus>
               </template>
                <template v-else>
                 {{ col.value }} 
@@ -125,20 +125,13 @@
 
 <script>
 //import kButton from "../../components/tables/cButton.vue";
-import cardTotal from "../../components/cCard.vue";
 
 import cBankModal from "./cBankModal.vue";
-import cStatus from "../../components/status/cStatus.vue";
-
-import kToolbar from "../../components/cToolbar.vue";
 
 export default {
   middleware: "auth",
   components: {
     cBankModal,
-    kToolbar,
-    cStatus,
-    cardTotal
   },
   methods: {
     updateBank(val) {

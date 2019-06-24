@@ -3,7 +3,7 @@
         <q-chip dense :color="backgroundColor" text-color="white" icon="star">
           Total {{title}}
         </q-chip>
-        <q-card class="my-card">
+        <q-card >
                 
                 <q-card-section>
                   <div class="text-h6">{{kValue}}</div>                 
@@ -14,8 +14,8 @@
 </template>
 
 <script type="text/javascript">
-
 export default {
+    name:'kCard',
     props: ['title', 'total', 'backgroundColor', 'iconName', 'subtitle'],
     computed: {
         kValue() {
@@ -31,18 +31,3 @@ export default {
     }
 }
 </script>
-<style lang="stylus">
-  .q-card
-    width 300px  
-  .bigger
-    width 450px
-    max-width 90vw
-.q-card-section 
-    height: 50px   
-  @media (max-width $breakpoint-xs-max)
-    .q-card
-      width 100%   
-.my-card
-  width 100%
-  max-width 250px
-</style>

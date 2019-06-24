@@ -10,13 +10,11 @@
 
 <script>
 import treetable from "../../components/treeTable/TreeTable.vue";
-import kToolbar from "../../components/cToolbar.vue";
 
 export default {
    middleware: "auth",
   components: {
     treetable,
-    kToolbar
   },
   data() {
     return {

@@ -60,6 +60,7 @@
 
 <script>
 export default {
+  name:'kAttachFiles',
   data() {
     return {
       openAttachFilesFormLayout: false,

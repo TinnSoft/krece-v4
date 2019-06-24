@@ -8,7 +8,7 @@
         :columns="columns" 
         no-data-label="No se han realizado pagos">
         <template slot="col-status_id" slot-scope="cell">
-            <cStatus :id="cell.row.status_id"></cStatus>
+            <kStatus :id="cell.row.status_id"></kStatus>
         </template>
 
     </q-table>
@@ -16,12 +16,8 @@
 <script type="text/javascript">
 
 
-import cStatus from '../../components/status/cStatus.vue'
 
 export default {
-    components: {
-        cStatus
-    },
     props: ['qdata'],
     data() {
         return {

@@ -100,18 +100,14 @@ export default {
     }
   },
   methods: {
-    _subString(val) {
+  /*  _subString(val) {
       return val.substring(0, 1);
-    },
-    logout() {
-      this.$store.dispatch("logout").then(() => {
-        this.$router.push({ name: "auth.login" });
-      });
-    }
+    },*/
+ 
+     async logout () {
+      await this.$store.dispatch('auth/logout')  
+      this.$router.push({ name: 'login' })
+    } 
   }
 };
 </script>
-<style lang="stylus">
-   /*.q-icon 
-    color teal*/
-</style>

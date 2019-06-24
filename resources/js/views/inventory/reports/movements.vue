@@ -32,7 +32,7 @@
          <q-tr slot="body" slot-scope="props" :props="props" class="cursor-pointer">
           <q-td auto-width v-for="col in props.cols" :key="col.name" :props="props">             
               <template v-if="col.name==='status_id'">
-                  <rowStatus  :statusId="props.row.status_id" :processType="kmodule" ></rowStatus>
+                  <kStatus  :statusId="props.row.status_id" :processType="kmodule" ></kStatus>
               </template>
               <template v-else>
                 {{ col.value }} 
@@ -42,13 +42,9 @@
     </q-table>
 </template>
 <script type="text/javascript">
-import rowStatus from "../../../components/status/cStatus.vue";
 import movementsCols from "./movements_cols";
 
 export default {
-  components: {
-    rowStatus
-  },
   props: ["path", "kmodule"],
   methods: {
     fetchData(path) {
