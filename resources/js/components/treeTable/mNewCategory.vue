@@ -68,7 +68,6 @@
 <script>
 import kButton from "../../components/tables/cButton.vue";
 import kNotify from "../../components/messages/Notify.js";
-import kBlockQuote from "../../components/messages/cBlockQuote.vue";
 
 export default {
   data() {
@@ -90,7 +89,6 @@ export default {
   },
   components: {
     kButton,
-    kBlockQuote
   },
   methods: {
     handleHide(newVal) {

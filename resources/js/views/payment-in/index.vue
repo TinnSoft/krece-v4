@@ -10,7 +10,6 @@
 
 <script>
 import kDatatable from "../../components/tables/Datatable-Index.vue";
-import kToolbar from "../../components/cToolbar.vue";
 
 export default {
   middleware: "auth",

@@ -16,19 +16,36 @@
               <tbody>
                   <tr  v-for="(_detail, index) in form.detail" :key="index">                      
                       <td>   
-                         <q-select filled dense clearable  hide-bottom-space
-                                    :error="checkIfFieldHasError(errors,['detail.' + index + '.product_id'])"                                
-                                    filter 
-                                    v-model="_detail.product" 
-                                    @input="onChangeProduct(_detail)" 
-                                    :options="base.products"
-                                    options-dense
-                                    >
+                          <q-field borderless bottom-slots dense hide-bottom-space>
+                            <template v-slot:before>
+                              <q-btn @click="remove(_detail)" round dense flat icon="delete" ></q-btn>
+                            </template>
+                    
+                            <template v-slot:control>
+                              <kSelectFilter
+                                      :error="checkIfFieldHasError(errors,['detail.' + index + '.product_id'])"
+                                              v-model="_detail.product" 
+                                              :options="base.products"
+                                              @input="onChangeProduct(_detail)" 
+                                              filled
+                                              dense
+                                              outlined
+                                              self-filter
+                                              clearable
+                                              use-input
+                                              fill-input
+                                              hide-selected
+                                              emit-value
+                                              map-options
+                                              input-debounce="0"
+                                              options-dense
+                                              hide-bottom-space
+                                            >                          
+                                </kSelectFilter>
+                            </template>
+                          </q-field>
 
-                                  <template v-slot:before>
-                                      <q-btn @click="remove(_detail)" round dense flat icon="delete" ></q-btn>
-                                  </template>
-                                </q-select>
+                         
                       </td>
                       
                       <td>
@@ -39,6 +56,16 @@
                           </q-input>
                       </td>
                       <td>
+                         <!-- <kCurrencyInput
+                          :val="_detail.unit_price"
+                          v-model="_detail.unit_price"
+                          clearable
+                          :error="checkIfFieldHasError(errors,['detail.' + index + '.unit_price'])" 
+                          @input="_detail.unit_price"
+                          @blur="_detail.unit_price"
+                        >
+                        </kCurrencyInput>-->
+                      
                           <q-input hide-bottom-space
                                    dense
                                  :error="checkIfFieldHasError(errors,['detail.' + index + '.unit_price'])" 
@@ -58,7 +85,7 @@
                          v-model="_detail.tax_id" :value="_detail.tax_id" @input="onChangeTax(_detail)" :options="base.taxes"></q-select>                        
                       </td>
                       <td>
-                          <q-input hide-bottom-space dense disable type="number" prefix="$" :value="totalByLine(_detail)"></q-input>
+                          <q-input hide-bottom-space dense disable :value="totalByLine(_detail)"></q-input>
                       </td>                    
                   </tr>
                   <tr>
@@ -108,7 +135,8 @@ export default {
   components: {
     cTotals
   },
-  created() {},
+  created() {
+  },
   computed: {
     subTotal() {
       var vm = this;
@@ -199,7 +227,7 @@ export default {
       var total =
         val.quantity * val.unit_price -
         val.quantity * val.unit_price * val.discount / 100;
-      return total;
+      return accounting.formatMoney(total);
     },
     onChangeTax(val) {
       if (val.tax_id) {

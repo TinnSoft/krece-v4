@@ -1,10 +1,12 @@
 <template>
      <q-page padding>
-      <q-card>
+        <kToolbar toolbarlabel="DETALLE DE FACTURA DE VENTA" :redirectTo="`/${model}`" @click="$router.push(`/${model}/create`)"
+            :showDropdown="true" label2="NUEVA FACTURA" icon2="add"></kToolbar>  
+      
+      <q-card>       
+        <kToolbarCustom :label="labelval"></kToolbarCustom>
         <q-card-section>
-          <cToolbar toolbarlabel="FACTURA DE VENTA #: " :documentId="public_id" :redirectTo="`/${model}`" @click="$router.push(`/${model}/create`)"
-            :showDropdown="true" label2="NUEVA FACTURA" icon2="add"></cToolbar>  
-
+        
         <div class="doc-container">
             <div class="row ">
                 <div class="col-sm-5">
@@ -25,7 +27,7 @@
                         
                         <q-field dense readonly>
                           <template v-slot:control>
-                            <cStatus :statusId="data.status_id"></cStatus>
+                            <kStatus :statusId="data.status_id"></kStatus>
                           </template>
                         </q-field>              
 
@@ -70,9 +72,9 @@
             </q-tab-panel>
           </q-tab-panels>
         
-         <cSendEmail ref="_sendEmail"></cSendEmail>
+         <kSendEmailForm ref="_sendEmail"></kSendEmailForm>
       
-        <cAttachFiles ref="_attachfile"></cAttachFiles>
+        <kAttachFiles ref="_attachfile"></kAttachFiles>
 
   <!--
        
@@ -136,23 +138,15 @@
 </template>
 
 <script>
-import cSendEmail from "../../components/modals/SendEmailForm.vue";
-import cToolbar from "../../components/cToolbar.vue";
-import cStatus from "../../components/status/cStatus.vue";
 import cTableShow from "../../components/tables/Datatable-Show.vue";
 import cPaymentAssociated from "./payment_associated.vue";
-import cAttachFiles from "../../components/modals/AttachFiles.vue";
 import cToggle from "../../components/tables/cToggle.vue";
 
 export default {
   middleware: "auth",
   components: {
-    cSendEmail,
-    cToolbar,
-    cStatus,
     cTableShow,
     cPaymentAssociated,
-    cAttachFiles,
     cToggle
   },
   created() {
@@ -164,6 +158,7 @@ export default {
       state: "ABIERTA",
       model: "invoice",
       path: `invoice/${this.$route.params.id}`,
+      labelval:`Factura # ${this.$route.params.id}`,
       data: {},
       listprice: "",
       contactname: "",

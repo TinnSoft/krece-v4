@@ -102,7 +102,6 @@
 <script>
 
 import movementsSummary from "./reports/movements.vue";
-import kToolbar from "../../components/cToolbar.vue";
 
 export default {
    middleware: "auth",

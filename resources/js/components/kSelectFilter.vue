@@ -21,6 +21,7 @@
 <script>
 
 export default {
+  name: 'kSelectFilter',
   inheritAttrs: false,
   props: {
     selfFilter: {
@@ -44,7 +45,7 @@ export default {
       update(() => {
         const needle = val.toLowerCase()
         this.options = this.$attrs.options.filter(v => v.label.toLowerCase().includes(needle))
-      })
+       })
     },
     filterFunc (v, u, a) {
       this.selfFilter ? this.filterFn(v, u) : this.$emit('filter', v, u, a)

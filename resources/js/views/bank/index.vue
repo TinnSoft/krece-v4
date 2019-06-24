@@ -1,8 +1,8 @@
 <template>
         <q-page padding>
 
-        <cToolbar toolbarlabel="GESTIÓN DE BANCOS" :showbackButton="false" 
-        @click="openBankModal($refs, 'create')" label2="NUEVO BANCO" icon2="add"></cToolbar>        
+        <kToolbar toolbarlabel="GESTIÓN DE BANCOS" :showbackButton="false" 
+        @click="openBankModal($refs, 'create')" label2="NUEVO BANCO" icon2="add"></kToolbar>        
 
           <q-table ref="mainTable" 
               :data="table" 
@@ -44,14 +44,12 @@
 <script>
 import cButton from "../../components/tables/cButton.vue";
 import cBankModal from "./cBankModal.vue";
-import cToolbar from "../../components/cToolbar.vue";
 
 export default {
   middleware: "auth",
   components: {
     cButton,
     cBankModal,
-    cToolbar
   },
   methods: {
     show(cell) {

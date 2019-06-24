@@ -10,6 +10,7 @@
 </template>
 <script type="text/javascript">
 export default {
+  name:'kStatus',
   props: ["statusId","processType"],
 };
 </script>

@@ -39,13 +39,11 @@
 </template>
 
 <script>
-import kToolbar from "../../components/cToolbar.vue";
 import indexTable from "./tables/index_table.vue";
 
 export default {
   middleware: "auth",
   components: {
-    kToolbar,
     indexTable
   },
   methods: {

@@ -135,11 +135,8 @@
 <script>
 import Quasar from "Quasar";
 const { addToDate } = Quasar.utils.date;
-import cAttachFiles from "../../components/modals/AttachFiles.vue";
-import kDateTime from "../../components/cDateTime.vue";
 import cPaymentInvoiceTable from '../payment-in/payment_datatable.vue'
 import cPaymentInDetail from "../../components/tables/Datatable-Form-Detail.vue";
-import kToolbar from "../../components/cToolbar.vue";
 
 export default {
   middleware: "auth",
@@ -179,14 +176,10 @@ export default {
     };
   },
   components: {
-    kToolbar,
-    cAttachFiles,
-    kDateTime,
     cPaymentInDetail,
     cPaymentInvoiceTable
   },
   created() {
-      console.log(this.form)
     if (this.$route.meta.mode === "edit") {
       this.path = `payment-in/${this.$route.params.id}/edit`;
     }

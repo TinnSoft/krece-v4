@@ -94,7 +94,7 @@ export default {
     LoginLayout,HomeLayout
   },
    computed: mapGetters({
-    authenticated: "auth/check"
-  })
+    authenticated: 'auth/user'//'auth/check'
+  }),
 }
 </script>

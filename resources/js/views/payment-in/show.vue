@@ -60,7 +60,7 @@
                         <q-input v-model="payment.date" disable stack-label="Fecha de creación" />
                         <q-input :value="ftotal" disable stack-label="Total Pagado" />
                         <q-field label="Estado: " :label-width="2">
-                            <cStatus :statusId="payment.status_id"></cStatus>
+                            <kStatus :statusId="payment.status_id"></kStatus>
                         </q-field>
                     </q-list>
                 </div>
@@ -82,23 +82,17 @@
         </q-tabs>  
              
         </template>
-        <cSendEmail ref="_sendEmail"></cSendEmail>
+        <kSendEmailForm ref="_sendEmail"></kSendEmailForm>
      </q-page>
 </template>
 
 <script>
-import kToolbar from "../../components/cToolbar.vue";
 import cTableShow from "./show_datatable.vue";
-import cSendEmail from "../../components/modals/SendEmailForm.vue";
-import cStatus from "../../components/status/cStatus.vue";
 
 export default {
   middleware: "auth",
   components: {
-    cTableShow,
-    kToolbar,
-    cSendEmail,
-    cStatus
+    cTableShow
   },
   created() {
     this.fetchData();

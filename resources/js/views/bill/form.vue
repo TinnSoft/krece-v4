@@ -119,7 +119,7 @@
         <!--<pre><code>{{$data.form}}</code></pre>-->
         <totals :subtotal="subTotal" :discounts="DiscountsTotal" :taxes="TaxesTotal" :total="grandTotal"></totals>
 
-        <attachfiles ref="_attachfile"></attachfiles>
+        <kAttachFiles ref="_attachfile"></kAttachFiles>
     </div>
 </template>
 
@@ -127,8 +127,6 @@
 import Multiselect from 'vue-multiselect'
 import moment from 'moment'
 moment.locale('es');
-
-import attachfiles from '../../components/modals/AttachFiles.vue'
 
 import totals from '../../components/tables/Total.vue'
 
@@ -193,7 +191,7 @@ export default {
         QFixedPosition, QItem, QItemTile, QFab,
         QFabAction, QList, Multiselect,
         QSelect, kDateTime, QDataTable, QItemSide, QItemMain,
-        Ripple, QSpinnerGears, attachfiles
+        Ripple, QSpinnerGears
     },
     created() {
         if (this.$route.meta.mode === 'edit') {

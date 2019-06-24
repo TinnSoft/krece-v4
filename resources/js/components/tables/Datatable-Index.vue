@@ -44,7 +44,7 @@
           <q-tr slot="body" slot-scope="props" :props="props" class="cursor-pointer">
             <q-td auto-width v-for="col in props.cols" :key="col.name" :props="props">             
               <template v-if="col.name==='status_id'">
-                <rowStatus  :statusId="props.row.status_id" :processType="kmodule"></rowStatus>
+                <kStatus  :statusId="props.row.status_id" :processType="kmodule"></kStatus>
               </template>
               <template v-else-if="col.name==='public_id'">
                 <u @click="show(props)">{{props.row.public_id}}</u>
@@ -84,19 +84,17 @@
             </q-td>
           </q-tr>
         </q-table>
-        <cSendEmail ref="_sendEmail"></cSendEmail>
+        <kSendEmailForm ref="_sendEmail"></kSendEmailForm>
      
     </div>
 </template>
 <script type="text/javascript">
-import rowStatus from "../../components/status/cStatus.vue";
 import cToggle from "../tables/cToggle.vue";
 import cItem from "../tables/cItem.vue";
-import cSendEmail from "../../components/modals/SendEmailForm.vue";
 import columnsIndex from "../../components/tables/columns/colIndex";
 
 export default {
-  components: { rowStatus, cToggle, cItem, cSendEmail },
+  components: { cToggle, cItem },
   props: [
     "path",
     "kmodule",

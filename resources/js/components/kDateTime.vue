@@ -20,6 +20,7 @@
 <script type="text/javascript">
 
 export default {
+    name:'kDateTime',
     data() {
         return {          
            date:'13/06/2019' //default value

@@ -19,7 +19,7 @@ export const getters = {
 export const mutations = {
   [types.SAVE_TOKEN] (state, { token, remember }) {
     state.token = token
-    Cookies.set('token', token, { expires: remember ? 3650 : null })
+    Cookies.set('token', token, { expires: remember ? 365 : null })
   },
 
   [types.FETCH_USER_SUCCESS] (state, { user }) {
@@ -66,8 +66,12 @@ export const actions = {
 
   async logout ({ commit }) {
     try {
+      console.log('inicio logout')
       await axios.post('/api/logout')
-    } catch (e) { }
+      console.log('fin logout')
+    } catch (e) {
+      console.log('error logout')
+     }
 
     commit(types.LOGOUT)
   },
