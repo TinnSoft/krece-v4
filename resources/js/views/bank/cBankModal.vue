@@ -16,7 +16,7 @@
               </q-bar>
 
               <q-card-section>
-                  <q-select hide-bottom-space dense color="secondary" autofocus-filter filter label="*Tipo de cuenta"
+                  <q-select hide-bottom-space dense color="secondary" filter label="*Tipo de cuenta"
                       :error="checkIfFieldHasError(errors, 'bank_account_type_id')" v-model="form.bank_account_type_id" :options="base.banks" ></q-select>
    
                   <q-input hide-bottom-space dense :error="checkIfFieldHasError(errors, 'bank_account_name')" color="secondary" v-model="form.bank_account_name" 

@@ -74,7 +74,7 @@
                           icon="account_balance"
                           icon-color="green"
                         >
-                          <q-select clearable filter autofocus-filter filter-placeholder="" 
+                          <q-select clearable filter filter-placeholder="" 
                           color="green"
                               v-model="bankSelected"
                               float-label="Seleccione un Banco"

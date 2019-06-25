@@ -81,7 +81,7 @@
                           <q-input hide-bottom-space dense type="number" prefix="%" v-model="_detail.discount"></q-input>
                       </td>
                       <td>
-                        <q-select hide-bottom-space dense  autofocus-filter filter filter-placeholder="Buscar impuesto" 
+                        <q-select hide-bottom-space dense filter filter-placeholder="Buscar impuesto" 
                          v-model="_detail.tax_id" :value="_detail.tax_id" @input="onChangeTax(_detail)" :options="base.taxes"></q-select>                        
                       </td>
                       <td>

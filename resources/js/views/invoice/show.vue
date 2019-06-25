@@ -1,47 +1,69 @@
 <template>
-     <q-page padding>
-        <kToolbar toolbarlabel="DETALLE DE FACTURA DE VENTA" :redirectTo="`/${model}`" @click="$router.push(`/${model}/create`)"
-            :showDropdown="true" label2="NUEVA FACTURA" icon2="add"></kToolbar>  
-      
-      <q-card>       
-        <kToolbarCustom :label="labelval"></kToolbarCustom>
-        <q-card-section>
-        
+  <q-page padding>
+    <kToolbar
+      toolbarlabel="DETALLE DE FACTURA DE VENTA"
+      :redirectTo="`/${model}`"
+      @click="$router.push(`/${model}/create`)"
+      label2="NUEVA FACTURA"
+      icon2="add"
+    ></kToolbar>
+
+    <q-card>
+      <kToolbarCustom :label="labelval" :showDropdown="true" :objectVM="this"></kToolbarCustom>
+      <q-card-section>
         <div class="doc-container">
-            <div class="row ">
-                <div class="col-sm-5">
-                        <q-input dense  v-model="contactname" readonly label="Cliente" stack-label></q-input>
-                        <q-input dense  v-model="seller" readonly label="Vendedor" stack-label></q-input>
-                        <q-input  autogrow dense v-model="data.observations" type="textarea" stack-label readonly label="Observaciones"></q-input>
-                        <q-input dense  v-model="listprice" readonly label="Lista de precios" stack-label></q-input>
-                        <q-input dense  v-model="data.currency_code" readonly label="Moneda" stack-label></q-input>
-                   
-                </div>
-                <div class="col-sm-1">
-                </div>
-                <div class="col-sm-5">
-                        <q-input  dense v-model="data.date" readonly label="Fecha de creación" stack-label></q-input>
-                        <q-input  dense v-model="data.due_date" readonly label="Fecha de vencimiento" stack-label></q-input>
-                        <q-input  autogrow dense v-model="data.notes" type="textarea" readonly label="Notas" stack-label></q-input>
-
-                        
-                        <q-field dense readonly>
-                          <template v-slot:control>
-                            <kStatus :statusId="data.status_id"></kStatus>
-                          </template>
-                        </q-field>              
-
-                        <br>
-                        <q-btn flat class="within-iframe-hide" color="positive" @click="LoadFiles($refs)">
-                            <q-icon size="1rem" name="attach_file"></q-icon>
-                            <small style='text-decoration: underline'>Gestionar Documentos</small>
-                        </q-btn>
-                </div>
+          <div class="row">
+            <div class="col-sm-5">
+              <q-input dense v-model="contactname" readonly label="Cliente" stack-label></q-input>
+              <q-input dense v-model="seller" readonly label="Vendedor" stack-label></q-input>
+              <q-input
+                autogrow
+                dense
+                v-model="data.observations"
+                type="textarea"
+                stack-label
+                readonly
+                label="Observaciones"
+              ></q-input>
+              <q-input dense v-model="listprice" readonly label="Lista de precios" stack-label></q-input>
+              <q-input dense v-model="data.currency_code" readonly label="Moneda" stack-label></q-input>
             </div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-5">
+              <q-input dense v-model="data.date" readonly label="Fecha de creación" stack-label></q-input>
+              <q-input
+                dense
+                v-model="data.due_date"
+                readonly
+                label="Fecha de vencimiento"
+                stack-label
+              ></q-input>
+              <q-input
+                autogrow
+                dense
+                v-model="data.notes"
+                type="textarea"
+                readonly
+                label="Notas"
+                stack-label
+              ></q-input>
 
+              <q-field dense readonly>
+                <template v-slot:control>
+                  <kStatus :statusId="data.status_id"></kStatus>
+                </template>
+              </q-field>
+
+              <br>
+              <q-btn flat class="within-iframe-hide" color="positive" @click="LoadFiles($refs)">
+                <q-icon size="1rem" name="attach_file"></q-icon>
+                <small style="text-decoration: underline">Gestionar Documentos</small>
+              </q-btn>
+            </div>
+          </div>
         </div>
         <br>
-        
+
         <q-tabs
           v-model="tabDefault"
           dense
@@ -49,34 +71,34 @@
           active-color="primary"
           indicator-color="primary"
           align="left"
-          narrow-indicator   
+          narrow-indicator
           no-caps
           inline-label
         >
-          <q-tab name="detail" icon="details" label="DETALLE" ></q-tab>
-          <q-tab name="payment" icon="attach_money" label="PAGOS ASOCIADOS" ></q-tab>
+          <q-tab name="detail" icon="details" label="DETALLE"></q-tab>
+          <q-tab name="payment" icon="attach_money" label="PAGOS ASOCIADOS"></q-tab>
         </q-tabs>
         <q-tab-panels v-model="tabDefault">
-            <q-tab-panel name="detail">
-                <cTableShow 
-                    :qdata="table" 
-                    :subtotal="data.sub_total" 
-                    :discounts="data.total_discounts" 
-                    :taxes.sync="totalTaxes" 
-                    :total="data.total"
-                    :isTaxArray="true"
-                ></cTableShow>         
-            </q-tab-panel>
-            <q-tab-panel name="payment" >
-                 <cPaymentAssociated :qdata="payments"></cPaymentAssociated> 
-            </q-tab-panel>
-          </q-tab-panels>
-        
-         <kSendEmailForm ref="_sendEmail"></kSendEmailForm>
-      
+          <q-tab-panel name="detail">
+            <cTableShow
+              :qdata="table"
+              :subtotal="data.sub_total"
+              :discounts="data.total_discounts"
+              :taxes.sync="totalTaxes"
+              :total="data.total"
+              :isTaxArray="true"
+            ></cTableShow>
+          </q-tab-panel>
+          <q-tab-panel name="payment">
+            <cPaymentAssociated :qdata="payments"></cPaymentAssociated>
+          </q-tab-panel>
+        </q-tab-panels>
+
+        <kSendEmailForm ref="_sendEmail"></kSendEmailForm>
+
         <kAttachFiles ref="_attachfile"></kAttachFiles>
 
-  <!--
+        <!--
        
        
 
@@ -130,11 +152,10 @@
           </q-popover>
         </q-btn>
       </q-page-sticky>
- -->
-        </q-card-section>
-      </q-card>
-     </q-page>
-    
+        -->
+      </q-card-section>
+    </q-card>
+  </q-page>
 </template>
 
 <script>
@@ -154,11 +175,11 @@ export default {
   },
   data() {
     return {
-      tabDefault: 'detail',
+      tabDefault: "detail",
       state: "ABIERTA",
       model: "invoice",
       path: `invoice/${this.$route.params.id}`,
-      labelval:`Factura # ${this.$route.params.id}`,
+      labelval: `Factura # ${this.$route.params.id}`,
       data: {},
       listprice: "",
       contactname: "",
@@ -167,7 +188,7 @@ export default {
       table: [],
       pathEmailData: "getTemplateEmailToCustomerInvoice",
       payments: [],
-      pathToUpdateState:'invoice_update_state'
+      pathToUpdateState: "invoice_update_state"
     };
   },
   watch: {

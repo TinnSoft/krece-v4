@@ -18,8 +18,7 @@
                                     <q-field :error="checkIfFieldHasError(errors, 'customer_id')" :error-label="label_required_field">
                                         <q-select 
                                         clearable 
-                                        filter 
-                                        autofocus-filter  
+                                        filter  
                                         filter-placeholder="Buscar" 
                                         v-model="form.customer_id" 
                                         float-label="*Cliente" 
@@ -30,7 +29,6 @@
                                         <q-select 
                                           clearable 
                                           filter 
-                                          autofocus-filter
                                           filter-placeholder="Buscar" 
                                           v-model="form.bank_account_id" 
                                           float-label="*Cuenta" 

@@ -30,9 +30,9 @@
                               <q-input filled hide-bottom-space dense :error="checkIfFieldHasError(errors,'sale_price')" clearable type="number"  
                                   prefix="$" v-model="form.sale_price" label="*Precio de venta" />
                             
-                              <q-select options-dense filled hide-bottom-space dense filter autofocus-filter clearable :options="base.listPrice" v-model="form.list_price_id" label="Lista de Precios" />                    
+                              <q-select options-dense filled hide-bottom-space dense filter clearable :options="base.listPrice" v-model="form.list_price_id" label="Lista de Precios" />                    
                                               
-                              <q-select options-dense filled hide-bottom-space dense :error="checkIfFieldHasError(errors,'tax_id')" filter autofocus-filter 
+                              <q-select options-dense filled hide-bottom-space dense :error="checkIfFieldHasError(errors,'tax_id')" filter 
                                 clearable :options="base.taxes" v-model="form.tax_id" label="*Impuesto" />                    
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                                   
                                 <template v-if="form.inv_inStock===true">                                                                   
                                   <q-select filled hide-bottom-space options-dense dense :error="checkIfFieldHasError(errors,'inv_type_id')" 
-                                      filter autofocus
+                                      filter 
                                       clearable :options="base.measureUnit" v-model="form.inv_type_id" label="*Unidad de Medida">                                     
                                   </q-select>    
                                   <q-input filled hide-bottom-space dense :error="checkIfFieldHasError(errors,'inv_quantity_initial')" clearable type="number"  

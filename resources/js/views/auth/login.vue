@@ -9,7 +9,7 @@
               <q-form @keydown="form.errors.clear($event.target.name)">        
                 <q-input 
                   dense
-                  autofocus filled 
+                  filled 
                   v-model="form.email" type="email" 
                   :error="form.errors.has('email')" 
                   label="Tu correo" clearable >
